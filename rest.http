@@ -1,5 +1,5 @@
 ### variables
-@access=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMDAwMSIsImlhdCI6MTczNzMwODkyNywiZXhwIjoxNzM3MzE5NzI3fQ.g0sX6LGGYnphosQQGr8Ta-s9txMco_7HsjDMzGt-VEcuN4qyg-i3C87ji1ZgjTXEVtR_baDs1YZ0vUVxUh_NYw
+@access=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyMCIsImlhdCI6MTczODQ5Njc5MiwiZXhwIjoxNzM4NTA3NTkyfQ.jiQfvdPx7-FPIB1mu7eDdv-Xb_Ubn_12MAihFso8pi_s_VnO39ncBPiiep8efu_PbtHc90cRb-adeQXusuEczQ
 
 ### signup
 POST http://localhost:8080/api/auth/register HTTP/1.1
@@ -16,7 +16,7 @@ POST http://localhost:8080/api/auth/login HTTP/1.1
 Content-Type: application/json
 
 {
-    "username": "10001",
+    "username": "user0",
     "password": "passworD#1"
 }
 
