@@ -1,7 +1,6 @@
 // Implement the user registration and authentication logic
 package com.imperionite.cp1.services;
 
-
 import com.imperionite.cp1.entities.User;
 import com.imperionite.cp1.repositories.UserRepository;
 

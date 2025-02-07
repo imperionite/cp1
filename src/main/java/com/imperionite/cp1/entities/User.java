@@ -2,8 +2,10 @@ package com.imperionite.cp1.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDateTime;
+import java.sql.Date;
 
 @Entity
 @Table(name = "users")
@@ -17,10 +19,10 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "username", unique = true, nullable = false)
+    @Column(unique = true, nullable = false)
     private String username;
 
-    @Column(name = "password", nullable = false)
+    @Column(nullable = false)
     private String password;
 
     @Column(name = "is_active", nullable = false)
@@ -29,24 +31,24 @@ public class User {
     @Column(name = "is_admin", nullable = false)
     private Boolean isAdmin = false;
 
-    @Column(name = "is_superuser", nullable = false)
-    private Boolean isSuperuser = false;
+    @CreationTimestamp
+    @Column(updatable = false, name = "created_at")
+    private Date createdAt;
 
-    @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt;
-
+    @UpdateTimestamp
     @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    private Date updatedAt;
 
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
+    // Constructor that accepts username and password, sets isActive to true
+    // automatically
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+        this.isActive = true; // automatically set to true on user creation
+        this.isAdmin = false;
     }
 
-    @PreUpdate
-    protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
+    public void deactivate() {
+        this.isActive = false;
     }
-
 }

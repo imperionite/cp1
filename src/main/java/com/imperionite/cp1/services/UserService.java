@@ -2,8 +2,6 @@ package com.imperionite.cp1.services;
 
 import com.imperionite.cp1.entities.User;
 import com.imperionite.cp1.repositories.UserRepository;
-
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

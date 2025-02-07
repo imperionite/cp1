@@ -32,14 +32,12 @@ public class UserInitializer implements ApplicationRunner {
         if (userRepository.count() == 0) {
             // Load initial data
             List<User> users = Arrays.asList(
-                new User(null, "superuser", encoder.encode("passworD#1"), true, true, true, null, null),
-                new User(null, "admin", encoder.encode("passworD#1"), true, true, false, null, null),
-                new User(null, "user0", encoder.encode("passworD#1"), true, false, false, null, null),
-                new User(null, "user1", encoder.encode("passworD#1"), true, false, false, null, null),
-                new User(null, "user2", encoder.encode("passworD#1"), true, false, false, null, null),
-                new User(null, "user3", encoder.encode("passworD#1"), true, false, false, null, null),
-                new User(null, "user4", encoder.encode("passworD#1"), true, false, false, null, null),
-                new User(null, "user5", encoder.encode("passworD#1"), true, false, false, null, null)
+                new User(null, "admin", encoder.encode("passworD#1"), true, true, null, null),
+                new User(null, "user0", encoder.encode("passworD#1"), true, false, null, null),
+                new User(null, "user1", encoder.encode("passworD#1"), true, false, null, null),
+                new User(null, "user2", encoder.encode("passworD#1"), true, false, null, null),
+                new User(null, "user3", encoder.encode("passworD#1"), true, false, null, null),
+                new User(null, "user4", encoder.encode("passworD#1"), true, false, null, null)
                 
             );
 
