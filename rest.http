@@ -1,12 +1,13 @@
 ### variables
-@access=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTczODkxNzY2MiwiZXhwIjoxNzM4OTI4NDYyfQ.mAv60BE6VNmgW0CtDza34QWic5vqBOL5z9pE7YWUMuwBPgCPM5adk-KP_44L2QsmPIOHy4a7jGVGK9Bf5mrgDg
+@access=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTczODkzODkyNSwiZXhwIjoxNzM4OTQ5NzI1fQ.V9Lrr27lLoLZ3cpfRnCe8XGa-5_kRAm-dkdqjo6XYbi6AoyxBk51igAAAGTKXZL4cfMFPpcmQ82iO6rcp_Iw7A
+
 
 ### register new user
 POST http://localhost:8080/api/auth/register HTTP/1.1
 Content-Type: application/json
 
 {
-    "username": "user5",
+    "username": "user6",
     "password": "passworD#1"
 }
 
@@ -16,7 +17,7 @@ POST http://localhost:8080/api/auth/login HTTP/1.1
 Content-Type: application/json
 
 {
-    "username": "admin",
+    "username": "user6",
     "password": "passworD#1"
 }
 
@@ -31,58 +32,63 @@ Content-Type: application/json
 Authorization: Bearer {{access}}
 
 
-### test all users
+### fetch all users (admin)
 GET http://localhost:8080/api/users/ HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{access}}
 
 
-### test me
+### test me (auth users)
 GET http://localhost:8080/api/users/me HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{access}}
 
-### add new employee
+### add new employee (admin)
 POST http://localhost:8080/api/employees
 Content-Type: application/json
 Authorization: Bearer {{access}}
 
 {
-"employeeNumber": "10001",
-  "lastName": "Garcia",
-  "firstName": "Manuel III",
-  "birthday": "1983-10-11",
-  "address": "Valero Carpark Building Valero Street 1227, Makati City",
-  "phoneNumber": "966-860-270",
-  "sss": "44-4506057-3",
-  "philhealth": "820126853951",
-  "tin": "442-605-657-000",
-  "pagibig": "691295330870",
+"employeeNumber": "10007",
+  "lastName": "San Jose",
+  "firstName": "Brad",
+  "birthday": "1996-03-15",
+  "address": "99 Strosin Hills, Poblacion, Bislig 5340 Tawi-Tawi",
+  "phoneNumber": "797-009-261",
+  "sss": "40-2400714-1",
+  "philhealth": "239192926939",
+  "tin": "672-474-690-000",
+  "pagibig": "210850209964",
   "status": "Regular",
-  "position": "Chief Executive Officer",
-  "immediateSupervisor": "N/A",
-  "basicSalary": 90000,
+  "position": "HR Team Leader",
+  "immediateSupervisor": "Villanueva, Andrea Mae",
+  "basicSalary": 42975,
   "riceSubsidy": 1500,
-  "phoneAllowance": 1500,
-  "clothingAllowance": 1000,
-  "grossSemiMonthlyRate": 45000,
-  "hourlyRate": 535.71,
+  "phoneAllowance": 800,
+  "clothingAllowance": 800,
+  "grossSemiMonthlyRate": 21488,
+  "hourlyRate": 255.80,
   "user": {
-    "id": 2
+    "id": 8
   }
 }
 
-### fetch all employees
+### fetch all employees (admin)
 GET http://localhost:8080/api/employees
 Content-Type: application/json
 Authorization: Bearer {{access}}
 
-### fetch employee by id
+### fetch employee by id (admin)
 GET http://localhost:8080/api/employees/1
 Content-Type: application/json
 Authorization: Bearer {{access}}
 
-### fetch employee by employee number
+### fetch employee by employee number (auth user)
 GET http://localhost:8080/api/employees/employeeNumber/10002
+Content-Type: application/json
+Authorization: Bearer {{access}}
+
+### fetch all users with selected fields (admin)
+GET http://localhost:8080/api/employees/admin
 Content-Type: application/json
 Authorization: Bearer {{access}}

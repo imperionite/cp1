@@ -47,19 +47,19 @@ public class Employee {
     @NotNull
     private String phoneNumber;
 
-    @Column(name = "sss", nullable = false)
+    @Column(name = "sss", unique = true, nullable = false)
     @NotNull
     private String sss;
 
-    @Column(name = "philhealth", nullable = false)
+    @Column(name = "philhealth", unique = true, nullable = false)
     @NotNull
     private String philhealth;
 
-    @Column(name = "tin", nullable = false)
+    @Column(name = "tin", unique = true, nullable = false)
     @NotNull
     private String tin;
 
-    @Column(name = "pagibig", nullable = false)
+    @Column(name = "pagibig", unique = true, nullable = false)
     @NotNull
     private String pagibig;
 
