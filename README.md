@@ -22,10 +22,7 @@ docker system prune -a && docker images prune -a && docker volume prune -a
 docker stop mysql
 
 # restart container
-docker restart mysql
-
-# run Flyway migration
-mvn flyway:migrate 
+docker restart mysql 
 
 # clean and build Spring Boot app
 mvn clean && mvn install
