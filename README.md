@@ -69,7 +69,7 @@ The application should now be running on `http://localhost:8080`.
 ---
 
 ### **API Endpoints Overview**  
-For testing the available API functionalities, refer to the `rest.http` file in the repository.
+For testing the available API functionalities, refer to the [rest.http](https://github.com/imperionite/cp1/blob/main/rest.http) file in the repository.
 
 ---
 
