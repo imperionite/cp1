@@ -1,0 +1,17 @@
+npm-debug.log
+yarn-error.log
+.yarn/*
+!.yarn/versions
+!.yarn/releases
+.git
+.svn
+.env.*
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.md
+Dockerfile
+.gitignore
+.env
+*.tsbuildinfo

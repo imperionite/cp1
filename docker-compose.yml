@@ -1,0 +1,36 @@
+services:
+  mysql:
+    image: mysql:8.0.40
+    container_name: mysql
+    ports:
+      - "4306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: mydb
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: mypassword
+    volumes:
+      - mysql-data:/var/lib/mysql
+  
+  frontend:
+    build: ./frontend
+    image: frontend
+    user: appuser
+    volumes:
+      - ./frontend/src:/app/src  
+      - ./frontend/public:/app/public 
+      - /app/node_modules 
+    ports:
+      - 5173:5173
+    depends_on:
+      - mysql
+    environment:
+      - VITE_API_URL=https://localhost:8080/api
+      - CHOKIDAR_USEPOLLING=true  # Ensure file changes trigger live reloading in Docker
+    command: ["yarn", "dev"]  # Run the React app in development mode
+    working_dir: /app
+    stdin_open: true # Keeps stdin open to support live reloading
+    tty: true # Allocate a pseudo-TTY to keep the container interactive
+
+volumes:
+  mysql-data:
