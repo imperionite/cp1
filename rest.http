@@ -1,13 +1,13 @@
 ### variables
-@access=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTczODkzODkyNSwiZXhwIjoxNzM4OTQ5NzI1fQ.V9Lrr27lLoLZ3cpfRnCe8XGa-5_kRAm-dkdqjo6XYbi6AoyxBk51igAAAGTKXZL4cfMFPpcmQ82iO6rcp_Iw7A
+@access=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTczOTcyNTgxOSwiZXhwIjoxNzM5NzM2NjE5fQ.Xl0umc2Th0c0L1CJw_9XGZo7o1JV9phHQDMR2m9TJiaSXhUzFrVBq1hSHxv_LbD-pg4nXAxgMO0SMWcde7iwcg
 
-
-### register new user
+### register new user (admin)
 POST http://localhost:8080/api/auth/register HTTP/1.1
+Authorization: Bearer {{access}}
 Content-Type: application/json
 
 {
-    "username": "user6",
+    "username": "10035",
     "password": "passworD#1"
 }
 
@@ -17,7 +17,7 @@ POST http://localhost:8080/api/auth/login HTTP/1.1
 Content-Type: application/json
 
 {
-    "username": "user6",
+     "username": "10035",
     "password": "passworD#1"
 }
 

@@ -70,8 +70,7 @@ public class Employee {
     @NotNull
     private String position;
 
-    @Column(name = "immediate_supervisor", nullable = false)
-    @NotNull
+    @Column(name = "immediate_supervisor", nullable = true)
     private String immediateSupervisor;
 
     @Column(name = "basic_salary", nullable = false)

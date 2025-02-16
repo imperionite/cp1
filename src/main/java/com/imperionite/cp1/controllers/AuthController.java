@@ -1,49 +1,65 @@
-// Create an AuthController for handling sign-up and sign-in operations
 package com.imperionite.cp1.controllers;
 
 import com.imperionite.cp1.entities.User;
 import com.imperionite.cp1.securities.JwtTokenProvider;
 import com.imperionite.cp1.services.AuthService;
-
+import com.imperionite.cp1.services.UserService; // Import UserService
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/auth") // Base path for auth routes
-
+@RequestMapping("/api/auth")
 public class AuthController {
     @Autowired
-    private AuthService authService; // Inject Auth service
+    private AuthService authService;
 
     @Autowired
-    private JwtTokenProvider jwtTokenProvider; // Inject JWT provider
+    private JwtTokenProvider jwtTokenProvider;
 
-    @PostMapping("/register") // Endpoint for user registration
+    @Autowired
+    private UserService userService; // Inject UserService
 
-    public ResponseEntity<String> register(@Valid @RequestBody User user) {
-        authService.register(user); // Register user
-        return ResponseEntity.ok("User registered successfully!"); // Success response
-    }
+    @PostMapping("/register")
+    public ResponseEntity<String> register(@Valid @RequestBody User user, @AuthenticationPrincipal UserDetails userDetails) {
 
-    @PostMapping("/login") // Endpoint for user login
-    public ResponseEntity<Map<String, String>> login(@RequestBody User user) {
-        User authenticatedUser = authService.login(user); // Authenticate user
-        if (authenticatedUser != null) {
-            String jwt = jwtTokenProvider.generateToken(authenticatedUser.getUsername()); // Generate JWT
-
-            // Create response body with JWT token
-            Map<String, String> responseBody = new HashMap<>();
-            responseBody.put("access", jwt); // Add access token to the response
-            return ResponseEntity.ok(responseBody); // Return map containing JWT
+        if (userDetails == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        return ResponseEntity.status(401).body(Map.of("error", "Invalid credentials!")); // Invalid credentials
-                                                                                        
+        Optional<User> optionalUser = userService.findByUsername(userDetails.getUsername());
+
+        if (optionalUser.isPresent()) {
+            User currentUser = optionalUser.get();
+
+            if (currentUser.getIsAdmin()) {
+                authService.register(user);
+                return ResponseEntity.ok("User registered successfully!");
+            } else {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<Map<String, String>> login(@RequestBody User user) {
+        return authService.login(user)
+                .map(authenticatedUser -> {
+                    String jwt = jwtTokenProvider.generateToken(authenticatedUser.getUsername());
+                    Map<String, String> responseBody = new HashMap<>();
+                    responseBody.put("access", jwt);
+                    return ResponseEntity.ok(responseBody);
+                })
+                .orElse(ResponseEntity.status(401).body(Map.of("error", "Invalid credentials!")));
+    }
 }

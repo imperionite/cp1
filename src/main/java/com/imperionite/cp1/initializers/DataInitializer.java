@@ -4,22 +4,32 @@ import com.imperionite.cp1.entities.Employee;
 import com.imperionite.cp1.entities.User;
 import com.imperionite.cp1.repositories.EmployeeRepository;
 import com.imperionite.cp1.repositories.UserRepository;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Arrays;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class DataInitializer implements ApplicationRunner {
 
     private static final String DEFAULT_PASSWORD = "passworD#1";
+    private static final String ADMIN_USERNAME = "admin";
+    private static final String ADMIN_PASSWORD = "adminPassword";
 
     @Autowired
     private PasswordEncoder encoder;
@@ -35,170 +45,107 @@ public class DataInitializer implements ApplicationRunner {
     @Override
     @Transactional
     public void run(ApplicationArguments args) throws Exception {
-        // Check if employee data exists
+        Optional<User> existingAdmin = userRepository.findByUsername(ADMIN_USERNAME);
+        if (existingAdmin.isEmpty()) {
+            User admin = new User(ADMIN_USERNAME, encoder.encode(ADMIN_PASSWORD));
+            admin.setIsAdmin(true);
+            userRepository.save(admin);
+        }
+
         if (employeeRepository.count() == 0) {
-            // Load initial users
-            User admin = new User(null, "admin", encoder.encode("adminPassword"), true, true, null, null);
-            User user0 = new User(null, "user0", encoder.encode(DEFAULT_PASSWORD), true, false, null, null);
-            User user1 = new User(null, "user1", encoder.encode(DEFAULT_PASSWORD), true, false, null, null);
-            User user2 = new User(null, "user2", encoder.encode(DEFAULT_PASSWORD), true, false, null, null);
-            User user3 = new User(null, "user3", encoder.encode(DEFAULT_PASSWORD), true, false, null, null);
-            User user4 = new User(null, "user4", encoder.encode(DEFAULT_PASSWORD), true, false, null, null);
-            User user5 = new User(null, "user5", encoder.encode(DEFAULT_PASSWORD), true, false, null, null);
-
-            // Save users
-            userRepository.saveAll(Arrays.asList(admin, user0, user1, user2, user3, user4, user5));
-
-            // Create initial employee data
-            List<Employee> employees = Arrays.asList(
-                    new Employee(
-                            null, // id will be generated
-                            "10001", // employeeNumber
-                            "Garcia", // lastName
-                            "Manuel III", // firstName
-                            LocalDate.of(1983, 10, 11), // birthday
-                            "Valero Carpark Building Valero Street 1227, Makati City", // address
-                            "966-860-270", // phoneNumber
-                            "44-4506057-3", // sss
-                            "820126853951", // philhealth
-                            "442-605-657-000", // tin
-                            "691295330870", // pagibig
-                            "Regular", // status
-                            "Chief Executive Officer", // position
-                            "N/A", // immediateSupervisor
-                            new BigDecimal("90000"), // basicSalary
-                            new BigDecimal("1500"), // riceSubsidy
-                            new BigDecimal("2000"), // phoneAllowance
-                            new BigDecimal("1000"), // clothingAllowance
-                            new BigDecimal("4500"), // // grossSemiMonthlyRate
-                            new BigDecimal("535.71"), // hourlyRate
-                            null, LocalDate.now(), // createdAt
-                            user0 // associated user
-                    ),
-                    new Employee(
-                            null,
-                            "10002",
-                            "Lim",
-                            "Antonio",
-                            LocalDate.of(1988, 6, 19),
-                            "San Antonio De Padua 2, Block 1 Lot 8 and 2, Dasmarinas, Cavite",
-                            "171-867-411",
-                            "52-2061274-9",
-                            "331735646338",
-                            "683-102-776-000",
-                            "663904995411",
-                            "Regular",
-                            "Chief Operating Officer",
-                            "Garcia, Manuel III",
-                            new BigDecimal("60000"),
-                            new BigDecimal("1500"),
-                            new BigDecimal("2000"),
-                            new BigDecimal("1000"),
-                            new BigDecimal("3000"),
-                            new BigDecimal("357.14"),
-                            null, LocalDate.now(),
-                            user1),
-                    new Employee(
-                            null,
-                            "10003",
-                            "Aquino",
-                            "Bianca Sofia",
-                            LocalDate.of(1989, 8, 4),
-                            "Rm. 402 4/F Jiao Building Timog Avenue Cor. Quezon Avenue 1100, Quezon City",
-                            "966-889-370",
-                            "30-8870406-2",
-                            "177451189665",
-                            "971-711-280-000",
-                            "171519773969",
-                            "Regular",
-                            "Chief Finance Officer",
-                            "Garcia, Manuel III",
-                            new BigDecimal("60000"),
-                            new BigDecimal("1500"),
-                            new BigDecimal("2000"),
-                            new BigDecimal("1000"),
-                            new BigDecimal("3000"),
-                            new BigDecimal("357.14"),
-                            null, LocalDate.now(),
-                            user2),
-
-                    new Employee(
-                            null,
-                            "10004",
-                            "Reyes",
-                            "Isabella",
-                            LocalDate.of(1994, 6, 16),
-                            "460 Solanda Street Intramuros 1000, Manila",
-                            "786-868-477",
-                            "40-2511815-0",
-                            "341911411254",
-                            "876-809-437-000",
-                            "416946776041",
-                            "Regular",
-                            "Chief Marketing Officer",
-                            "Garcia, Manuel III",
-                            new BigDecimal("60000"),
-                            new BigDecimal("1500"),
-                            new BigDecimal("2000"),
-                            new BigDecimal("1000"),
-                            new BigDecimal("3000"),
-                            new BigDecimal("357.14"),
-                            null, LocalDate.now(),
-                            user3),
-                    new Employee(
-                            null,
-                            "10005",
-                            "Hernandez",
-                            "Edward",
-                            LocalDate.of(1989, 9, 23),
-                            "National Highway, Gingoog,  Misamis Occidental",
-                            "088-861-012",
-                            "50-5577638-1",
-                            "957436191812",
-                            "031-702-374-000",
-                            "952347222457",
-                            "Regular",
-                            "IT Operations and Systems",
-                            "Lim, Antonio",
-                            new BigDecimal("52670"),
-                            new BigDecimal("1500"),
-                            new BigDecimal("1000"),
-                            new BigDecimal("1000"),
-                            new BigDecimal("26335"),
-                            new BigDecimal("313.51"),
-                            null, LocalDate.now(),
-                            user4),
-                    new Employee(
-                            null,
-                            "10006",
-                            "Villanueva",
-                            "Andrea Mae",
-                            LocalDate.of(1988, 2, 14),
-                            "17/85 Stracke Via Suite 042, Poblacion, Las Piñas 4783 Dinagat Islands ",
-                            "918-621-603",
-                            "49-1632020-8",
-                            "382189453145",
-                            "317-674-022-000",
-                            "441093369646",
-                            "Regular",
-                            "HR Manager",
-                            "Lim, Antonio",
-                            new BigDecimal("52670"),
-                            new BigDecimal("1500"),
-                            new BigDecimal("1000"),
-                            new BigDecimal("1000"),
-                            new BigDecimal("26335"),
-                            new BigDecimal("313.51"),
-                            null, LocalDate.now(),
-                            user5)
-
-            );
-
-            // Save employees to the database
-            employeeRepository.saveAll(employees);
-            System.out.println("Database initialized with default employees.");
+            List<Employee> employees = loadEmployeesFromCSV("employees_details.csv");
+            if (employees != null) {
+                employeeRepository.saveAll(employees);
+                System.out.println("Database initialized with employees from CSV.");
+            } else {
+                System.err.println("Failed to load employee data from CSV.");
+            }
         } else {
             System.out.println("Database already contains employee data.");
+        }
+    }
+
+    private List<Employee> loadEmployeesFromCSV(String csvFilePath) {
+        List<Employee> employees = new ArrayList<>();
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+
+        try {
+            ClassPathResource resource = new ClassPathResource(csvFilePath);
+            try (BufferedReader br = new BufferedReader(new FileReader(resource.getFile()))) {
+
+                Iterable<CSVRecord> records = CSVFormat.Builder.create()
+                        .setHeader("Employee #", "Last Name", "First Name", "Birthday", "Address", "Phone Number", "SSS #", "Philhealth #", "TIN #", "Pag-ibig #", "Status", "Position", "Immediate Supervisor", "Basic Salary", "Rice Subsidy", "Phone Allowance", "Clothing Allowance", "Gross Semi-monthly Rate", "Hourly Rate")
+                        .setSkipHeaderRecord(true)
+                        .build()
+                        .parse(br);
+
+                for (CSVRecord record : records) {
+                    Employee employee = new Employee();
+                    employee.setEmployeeNumber(record.get("Employee #").trim());
+                    employee.setLastName(record.get("Last Name").trim());
+                    employee.setFirstName(record.get("First Name").trim());
+                    employee.setBirthday(LocalDate.parse(record.get("Birthday").trim(), dateFormatter));
+                    employee.setAddress(record.get("Address").trim());
+                    employee.setPhoneNumber(record.get("Phone Number").trim());
+                    employee.setSss(record.get("SSS #").trim());
+                    employee.setPhilhealth(record.get("Philhealth #").trim());
+                    employee.setTin(record.get("TIN #").trim());
+                    employee.setPagibig(record.get("Pag-ibig #").trim());
+                    employee.setStatus(record.get("Status").trim());
+                    employee.setPosition(record.get("Position").trim());
+                    employee.setImmediateSupervisor(record.get("Immediate Supervisor").trim());
+
+                    try {
+                        employee.setBasicSalary(parseBigDecimal(record.get("Basic Salary")));
+                        employee.setRiceSubsidy(parseBigDecimal(record.get("Rice Subsidy")));
+                        employee.setPhoneAllowance(parseBigDecimal(record.get("Phone Allowance")));
+                        employee.setClothingAllowance(parseBigDecimal(record.get("Clothing Allowance")));
+                        employee.setGrossSemiMonthlyRate(parseBigDecimal(record.get("Gross Semi-monthly Rate")));
+                        employee.setHourlyRate(parseBigDecimal(record.get("Hourly Rate")));
+
+                        Optional<User> existingUser = userRepository.findByUsername(employee.getEmployeeNumber());
+                        User userToSet;
+                        if (existingUser.isPresent()) {
+                            userToSet = existingUser.get();
+                        } else {
+                            userToSet = new User(employee.getEmployeeNumber(), encoder.encode(DEFAULT_PASSWORD));
+                        }
+                        employee.setUser(userToSet);
+                        employees.add(employee);
+
+                    } catch (NumberFormatException e) {
+                        System.err.println("Error parsing number for employee: " + employee.getEmployeeNumber());
+                        System.err.println("Problematic record from CSV: " + record);
+                        e.printStackTrace();
+                        return null;
+                    }
+                }
+
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return employees;
+    }
+
+    private BigDecimal parseBigDecimal(String value) {
+        if (value == null || value.isEmpty() || value.equalsIgnoreCase("NULL") || value.equalsIgnoreCase("N") || value.equalsIgnoreCase("null")) {
+            return BigDecimal.ZERO;
+        }
+
+        String cleanedValue = value.replace("\"", "").replace(",", "").trim();
+        cleanedValue = cleanedValue.replaceAll("\\u00A0", ""); // Remove non-breaking spaces
+        cleanedValue = cleanedValue.replaceAll("\\ufeff", ""); // Remove Byte Order Mark (BOM)
+
+        System.out.println("Converting to BigDecimal: \"" + cleanedValue + "\""); // Print for debugging
+
+        try {
+            return new BigDecimal(cleanedValue);
+        } catch (NumberFormatException e) {
+            System.err.println("Error parsing BigDecimal: \"" + cleanedValue + "\"");
+            throw e;
         }
     }
 }

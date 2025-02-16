@@ -2,7 +2,6 @@ package com.imperionite.cp1.configs;
 
 import com.imperionite.cp1.securities.JwtAuthenticationFilter;
 import com.imperionite.cp1.services.CustomUserDetailsService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,53 +19,51 @@ import org.springframework.web.cors.CorsConfiguration;
 import java.util.Arrays;
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity // Enable Spring Security's web security features
 public class WebSecurityConfig {
 
     @Autowired
-    CustomUserDetailsService userDetailsService;
+    CustomUserDetailsService userDetailsService; // Inject custom user details service
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter();
+        return new JwtAuthenticationFilter(); // Create JWT authentication filter bean
     }
 
     @Bean
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
+        return authenticationConfiguration.getAuthenticationManager(); // Create authentication manager bean
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        // return new PBKDF2PasswordEncoder(); // Use PBKDF2 instead of BCrypt
-        return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder(); // Create password encoder bean (BCrypt)
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        // Updated configuration for Spring Security 6.x
         http
-                .csrf(csrf -> csrf.disable()) // Disable CSRF
-                .cors(cors -> cors
+                .csrf(csrf -> csrf.disable()) // Disable CSRF (Cross-Site Request Forgery) for stateless API
+                .cors(cors -> cors // Enable CORS (Cross-Origin Resource Sharing)
                         .configurationSource(request -> {
                             CorsConfiguration configuration = new CorsConfiguration();
-                            configuration.setAllowedOrigins(Arrays.asList("*")); // Allow all origins
-                            configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-                            configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept"));
-                            configuration.setExposedHeaders(Arrays.asList("Authorization"));
-                            configuration.setMaxAge(3600L); // Set max age to 1 hour
+                            configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080", "http://localhost:3157", "http://yourdomain.com")); // **MODIFY FOR PRODUCTION** - Specify allowed origins
+                            configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Specify allowed HTTP methods
+                            configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept")); // Specify allowed headers
+                            configuration.setExposedHeaders(Arrays.asList("Authorization")); // Specify exposed headers (for JWT)
+                            configuration.setMaxAge(3600L); // Set max age for preflight requests (1 hour)
                             return configuration;
                         }))
-                .sessionManagement(
-                        sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers("/api/auth/**").permitAll() // Use 'requestMatchers'
-                        .anyRequest().authenticated());
-        // Add the JWT filter before the UsernamePasswordAuthenticationFilter
-        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-        return http.build();
+                .sessionManagement(sessionManagement -> // Configure session management
+                        sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Set session policy to stateless (for JWT)
+                .authorizeHttpRequests(authorizeRequests -> authorizeRequests // Authorize HTTP requests
+                        .requestMatchers("/api/auth/register").hasRole("ADMIN") // Restrict /api/auth/register to ADMIN role
+                        .requestMatchers("/api/auth/**").permitAll() // Allow access to other /api/auth endpoints (login, etc.)
+                        .anyRequest().authenticated()); // All other requests require authentication
 
+        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class); // Add JWT filter before username/password filter
+
+        return http.build(); // Build and return the SecurityFilterChain
     }
-
 }

@@ -18,14 +18,12 @@ public class UserService {
 
     public List<User> allUsers() {
         List<User> users = new ArrayList<>();
-
         userRepository.findAll().forEach(users::add);
-
         return users;
     }
 
     public Optional<User> findByUsername(String username) {
-        return Optional.ofNullable(userRepository.findByUsername(username));
+        return userRepository.findByUsername(username); // No need for Optional.ofNullable
     }
 
     public Optional<User> getUserById(Long id) {
