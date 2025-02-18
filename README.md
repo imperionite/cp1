@@ -19,7 +19,8 @@ The **Phase 1 implementation** serves as the core structure of the payroll syste
 
 Refer to the following list of links to get an idea what are the REST API endpoints that are developed in the prohject and how HTTP requests are executed in [REST Client extension for Visual Studio Code (VS Code)](https://marketplace.visualstudio.com/items?itemName=humao.rest-client).
 
-- 
+- [User: User registration, authentication and fetching users](https://github.com/imperionite/cp1/blob/main/USER_HTTP.md)
+- [Employee: Displaying employee information, creating new emploee, etc.](https://github.com/imperionite/cp1/blob/main/EMPLOYEE_HTTP.md)
 
 
 
