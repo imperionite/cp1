@@ -15,6 +15,15 @@ The **Phase 1 implementation** serves as the core structure of the payroll syste
 
 ---
 
+## **REST API Endpoints**
+
+Refer to the following list of links to get an idea what are the REST API endpoints that are developed in the prohject and how HTTP requests are executed in [REST Client extension for Visual Studio Code (VS Code)](https://marketplace.visualstudio.com/items?itemName=humao.rest-client).
+
+- 
+
+
+
+
 ## **Requirements Scope**  
 
 The **MotorPH Payroll System - Phase 1** is built upon the initial requirements identified in the **MotorPH System Milestone 1 Document** ([MS1.md](https://github.com/imperionite/cp1ms1/blob/main/MS1.md)). This document serves as the **foundation** for the system, explicitly defining the core functionalities required for Phase 1.  

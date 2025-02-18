@@ -70,7 +70,8 @@ public class Employee {
     @NotNull
     private String position;
 
-    @Column(name = "immediate_supervisor", nullable = true)
+    @Column(name = "immediate_supervisor", nullable = false)
+    @NotNull
     private String immediateSupervisor;
 
     @Column(name = "basic_salary", nullable = false)
@@ -106,9 +107,9 @@ public class Employee {
     private LocalDate updatedAt; // Changed to LocalDateTime if you want time as well
 
 
-   @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-   @JoinColumn(name="user_id", referencedColumnName="id")
-   private User user; 
+    @OneToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 
    // Override toString() for better readability.
    @Override

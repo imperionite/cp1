@@ -4,11 +4,14 @@ import com.imperionite.cp1.entities.Employee;
 import com.imperionite.cp1.entities.User;
 import com.imperionite.cp1.services.EmployeeService;
 import com.imperionite.cp1.services.UserService;
+
 import com.imperionite.cp1.dtos.AdminEmployeeDTO;
+import com.imperionite.cp1.dtos.EmployeeBasicInfoDTO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -27,8 +30,12 @@ public class EmployeeController {
     @Autowired
     private UserService userService;
 
+    // private static final Logger log =
+    // LoggerFactory.getLogger(UserController.class);
+
     @PostMapping
-    public ResponseEntity<Employee> createEmployee(@RequestBody Employee employee, @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<Employee> createEmployee(@RequestBody Employee employee,
+            @AuthenticationPrincipal UserDetails userDetails) {
         if (userDetails == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -94,7 +101,8 @@ public class EmployeeController {
     }
 
     @GetMapping("/admin")
-    public ResponseEntity<List<AdminEmployeeDTO>> getAllEmployeesForAdmin(@AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<List<AdminEmployeeDTO>> getAllEmployeesForAdmin(
+            @AuthenticationPrincipal UserDetails userDetails) {
         if (userDetails == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -113,8 +121,7 @@ public class EmployeeController {
                                 employee.getLastName(),
                                 employee.getFirstName(),
                                 employee.getBirthday(),
-                                employee.getUser()
-                        ))
+                                employee.getUser()))
                         .collect(Collectors.toList());
                 return new ResponseEntity<>(employeeDTOs, HttpStatus.OK);
             } else {
@@ -126,8 +133,94 @@ public class EmployeeController {
     }
 
     @GetMapping("/employeeNumber/{employeeNumber}")
-    public ResponseEntity<Employee> getEmployeeByEmployeeNumber(@PathVariable String employeeNumber) {
-        Optional<Employee> employee = employeeService.getEmployeeByEmployeeNumber(employeeNumber);
-        return employee.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<Employee> getEmployeeByEmployeeNumber(@PathVariable String employeeNumber,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        Optional<User> optionalUser = userService.findByUsername(userDetails.getUsername());
+
+        if (optionalUser.isPresent()) {
+            User currentUser = optionalUser.get();
+
+            if (currentUser.getIsAdmin()) {
+                Optional<Employee> employee = employeeService.getEmployeeByEmployeeNumber(employeeNumber);
+                return employee.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+            } else {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
     }
+
+    @GetMapping("/basic-info") // basic employee info list
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<List<EmployeeBasicInfoDTO>> getAllEmployeesBasicInfo() {
+        List<Employee> employees = employeeService.getAllEmployees(); // Get all employees
+        List<EmployeeBasicInfoDTO> employeeDTOs = employees.stream()
+                .map(employee -> new EmployeeBasicInfoDTO( // Map to the DTO
+                        employee.getEmployeeNumber(),
+                        employee.getFirstName(),
+                        employee.getLastName(),
+                        employee.getBirthday()))
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(employeeDTOs, HttpStatus.OK);
+    }
+
+    @GetMapping("/basic-info/employeeNumber/{employeeNumber}") // retrieve basic info by employee umber
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<EmployeeBasicInfoDTO> getBasicInfoByEmployeeNumber(
+            @PathVariable String employeeNumber, @AuthenticationPrincipal UserDetails userDetails) {
+
+        if (userDetails == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        Optional<User> optionalUser = userService.findByUsername(userDetails.getUsername());
+
+        if (optionalUser.isPresent()) {
+            Optional<Employee> employee = employeeService.getEmployeeByEmployeeNumber(employeeNumber);
+            if (employee.isPresent()) {
+                EmployeeBasicInfoDTO dto = new EmployeeBasicInfoDTO(
+                        employee.get().getEmployeeNumber(),
+                        employee.get().getFirstName(),
+                        employee.get().getLastName(),
+                        employee.get().getBirthday());
+                return ResponseEntity.ok(dto);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<?> getMyDetails(@AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // 401 Unauthorized
+        }
+
+        Optional<User> optionalUser = userService.findByUsername(userDetails.getUsername());
+
+        if (optionalUser.isPresent()) {
+            User currentUser = optionalUser.get();
+
+            Optional<Employee> employee = employeeService.findByUser(currentUser); // Find Employee by User
+
+            if (employee.isPresent()) {
+                return ResponseEntity.ok(employee.get()); // 200 OK - Return Employee details
+            } else {
+                // User is authenticated, but no Employee record is associated with them.
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build(); // 403 Forbidden - User exists, but no
+                                                                            // Employee record
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // 401 Unauthorized - User not found
+        }
+    }
+
 }

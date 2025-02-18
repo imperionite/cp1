@@ -5,6 +5,7 @@ import com.imperionite.cp1.entities.User;
 import com.imperionite.cp1.repositories.EmployeeRepository;
 import com.imperionite.cp1.repositories.UserRepository;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +25,12 @@ public class EmployeeService {
 
     @Transactional
     public Employee createEmployee(Employee employee) {
-        // If the employee object contains a user object with an id, fetch the user from the database
         Optional<User> userOpt = userRepository.findById(employee.getUser().getId());
         if (userOpt.isPresent()) {
-            employee.setUser(userOpt.get());  // Set the User object on the Employee entity
-            return employeeRepository.save(employee);  // Save the Employee with the associated User
+            employee.setUser(userOpt.get());
+            return employeeRepository.save(employee);
         } else {
-            throw new RuntimeException("User not found for ID: " + employee.getUser().getId());
+            throw new EntityNotFoundException("User not found for ID: " + employee.getUser().getId()); 
         }
     }
 
@@ -40,6 +40,10 @@ public class EmployeeService {
 
     public Optional<Employee> getEmployeeById(Long id) {
         return employeeRepository.findById(id);
+    }
+
+    public Optional<Employee> findByUser(User user) {
+        return employeeRepository.findByUser(user);
     }
 
     public Optional<Employee> getEmployeeByEmployeeNumber(String employeeNumber) {

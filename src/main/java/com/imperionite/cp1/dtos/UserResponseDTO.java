@@ -1,6 +1,5 @@
 package com.imperionite.cp1.dtos;
 
-
 public class UserResponseDTO {
     private Long id;
     private String username;
@@ -25,6 +24,7 @@ public class UserResponseDTO {
     public Boolean getIsActive() {
         return isActive;
     }
+
     public Boolean getIsAdmin() {
         return isAdmin;
     }
