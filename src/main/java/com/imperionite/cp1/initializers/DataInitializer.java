@@ -6,9 +6,13 @@ import com.imperionite.cp1.repositories.EmployeeRepository;
 import com.imperionite.cp1.repositories.UserRepository;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -24,15 +28,30 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Component
-public class DataInitializer implements ApplicationRunner {
+/**
+ * Initializes the database with employee data from a CSV file and creates an
+ * admin user if one doesn't exist.
+ * This initializer runs before other initializers (due to the @Order
+ * annotation).
+ */
 
-    private static final String DEFAULT_PASSWORD = "passworD#1"; // Or a more secure default
+@Component
+@Order(1)
+public class DataInitializer implements ApplicationRunner, Ordered {
+
+    // For simplicity, env. variables are exposed and how passwords are structure on
+    // debug mode
+
+    private static final Logger logger = LoggerFactory.getLogger(DataInitializer.class);
+    private static final String DEFAULT_PASSWORD = "passworD#1"; // Default password for employees
     private static final String ADMIN_USERNAME = "admin";
-    private static final String ADMIN_PASSWORD = "adminPassword"; // Change this in production
+    private static final String ADMIN_PASSWORD = "adminPassword";
 
     @Autowired
-    private PasswordEncoder encoder;
+    private PasswordEncoder encoder; // Password encoder for secure password storage
+
+    @Autowired
+    private AttendanceInitializer attendanceInitializer; // Inject AttendanceInitializer
 
     private final EmployeeRepository employeeRepository;
     private final UserRepository userRepository;
@@ -42,132 +61,137 @@ public class DataInitializer implements ApplicationRunner {
         this.userRepository = userRepository;
     }
 
+    /**
+     * Runs the data initialization logic.
+     *
+     * @param args Application arguments (not used).
+     * @throws Exception If an error occurs during initialization.
+     */
+    /**
+     * Runs the data initialization logic.
+     *
+     * @param args Application arguments (not used).
+     * @throws Exception If an error occurs during initialization.
+     */
     @Override
     @Transactional
     public void run(ApplicationArguments args) throws Exception {
+        createAdminUser(); // Create admin user if it doesn't exist
+        loadEmployeeData(); // Load employee data from CSV
+        initializeAttendances(); // Initialize attendance data (after employees)
+    }
+
+    /**
+     * Creates the admin user if one doesn't already exist.
+     */
+    private void createAdminUser() {
         Optional<User> existingAdmin = userRepository.findByUsername(ADMIN_USERNAME);
         if (existingAdmin.isEmpty()) {
             User admin = new User(ADMIN_USERNAME, encoder.encode(ADMIN_PASSWORD));
-            admin.setIsAdmin(true);
+            admin.setIsAdmin(true); // Set admin flag
             userRepository.save(admin);
-        }
-
-        createUsersFromCSV("employees_details.csv"); // Create users first
-
-        List<Employee> employees = loadEmployeesFromCSV("employees_details.csv");
-
-        if (employees != null && !employees.isEmpty()) { // Check if employees list is not null and not empty
-            employeeRepository.saveAll(employees);
-            System.out.println("Database initialized with employees from CSV.");
-
-            updateUserAssociations(employees); // Update user associations using IDs
-
-        } else if (employees == null) {
-            System.err.println("Failed to load employee data from CSV.");
+            logger.info("Admin user created.");
         } else {
-            System.out.println("No new employees to add from CSV."); // Handle empty CSV case
+            logger.info("Admin user already exists.");
         }
     }
 
-    private void createUsersFromCSV(String csvFilePath) throws IOException {
-        ClassPathResource resource = new ClassPathResource(csvFilePath);
-
-        try (BufferedReader br = new BufferedReader(new FileReader(resource.getFile()))) {
-            Iterable<CSVRecord> records = CSVFormat.Builder.create()
-                    .setHeader("Employee #", "Last Name", "First Name", "Birthday", "Address", "Phone Number", "SSS #", "Philhealth #", "TIN #", "Pag-ibig #", "Status", "Position", "Immediate Supervisor", "Basic Salary", "Rice Subsidy", "Phone Allowance", "Clothing Allowance", "Gross Semi-monthly Rate", "Hourly Rate")
-                    .setSkipHeaderRecord(true)
-                    .build()
-                    .parse(br);
-
-            for (CSVRecord record : records) {
-                String employeeNumber = record.get("Employee #").trim();
-                Optional<User> existingUser = userRepository.findByUsername(employeeNumber);
-                if (existingUser.isEmpty()) {
-                    User newUser = new User(employeeNumber, encoder.encode(DEFAULT_PASSWORD));
-                    userRepository.save(newUser);
-                }
+    /**
+     * Loads employee data from the CSV file.
+     */
+    private void loadEmployeeData() {
+        if (employeeRepository.count() == 0) {
+            List<Employee> employees = loadEmployeesFromCSV("employees_details.csv");
+            if (employees != null) {
+                employeeRepository.saveAll(employees);
+                logger.info("Database initialized with employees from CSV.");
+            } else {
+                logger.error("Failed to load employee data from CSV. Initialization stopped.");
             }
+        } else {
+            logger.info("Database already contains employee data.");
         }
     }
+
 
 
     private List<Employee> loadEmployeesFromCSV(String csvFilePath) {
         List<Employee> employees = new ArrayList<>();
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 
-        try {
-            ClassPathResource resource = new ClassPathResource(csvFilePath);
-            try (BufferedReader br = new BufferedReader(new FileReader(resource.getFile()))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(new ClassPathResource(csvFilePath).getFile()))) {
 
-                Iterable<CSVRecord> records = CSVFormat.Builder.create()
-                        .setHeader("Employee #", "Last Name", "First Name", "Birthday", "Address", "Phone Number", "SSS #", "Philhealth #", "TIN #", "Pag-ibig #", "Status", "Position", "Immediate Supervisor", "Basic Salary", "Rice Subsidy", "Phone Allowance", "Clothing Allowance", "Gross Semi-monthly Rate", "Hourly Rate")
-                        .setSkipHeaderRecord(true)
-                        .build()
-                        .parse(br);
+            Iterable<CSVRecord> records = CSVFormat.Builder.create()
+                    .setHeader("Employee #", "Last Name", "First Name", "Birthday", "Address", "Phone Number", "SSS #",
+                            "Philhealth #", "TIN #", "Pag-ibig #", "Status", "Position", "Immediate Supervisor",
+                            "Basic Salary", "Rice Subsidy", "Phone Allowance", "Clothing Allowance",
+                            "Gross Semi-monthly Rate", "Hourly Rate")
+                    .setSkipHeaderRecord(true)
+                    .build()
+                    .parse(br);
 
-                for (CSVRecord record : records) {
-                    String employeeNumber = record.get("Employee #").trim();
+            for (CSVRecord record : records) {
+                Employee employee = new Employee();
+                employee.setEmployeeNumber(record.get("Employee #").trim());
+                employee.setLastName(record.get("Last Name").trim());
+                employee.setFirstName(record.get("First Name").trim());
+                employee.setBirthday(LocalDate.parse(record.get("Birthday").trim(), dateFormatter));
+                employee.setAddress(record.get("Address").trim());
+                employee.setPhoneNumber(record.get("Phone Number").trim());
+                employee.setSss(record.get("SSS #").trim());
+                employee.setPhilhealth(record.get("Philhealth #").trim());
+                employee.setTin(record.get("TIN #").trim());
+                employee.setPagibig(record.get("Pag-ibig #").trim());
+                employee.setStatus(record.get("Status").trim());
+                employee.setPosition(record.get("Position").trim());
+                employee.setImmediateSupervisor(record.get("Immediate Supervisor").trim());
 
-                    if (employeeRepository.findByEmployeeNumber(employeeNumber).isPresent()) {
-                        System.out.println("Skipping duplicate employee number: " + employeeNumber);
-                        continue; // Skip to the next record
+                try {
+                    employee.setBasicSalary(parseBigDecimal(record.get("Basic Salary")));
+                    employee.setRiceSubsidy(parseBigDecimal(record.get("Rice Subsidy")));
+                    employee.setPhoneAllowance(parseBigDecimal(record.get("Phone Allowance")));
+                    employee.setClothingAllowance(parseBigDecimal(record.get("Clothing Allowance")));
+                    employee.setGrossSemiMonthlyRate(parseBigDecimal(record.get("Gross Semi-monthly Rate")));
+                    employee.setHourlyRate(parseBigDecimal(record.get("Hourly Rate")));
+
+                    Optional<User> existingUser = userRepository.findByUsername(employee.getEmployeeNumber());
+                    User userToSet;
+                    if (existingUser.isPresent()) {
+                        userToSet = existingUser.get();
+                    } else {
+                        userToSet = new User(employee.getEmployeeNumber(), encoder.encode(DEFAULT_PASSWORD));
+                        userRepository.save(userToSet); // Save the User *before* associating it with the Employee
+                        logger.info("User created: {}", userToSet.getUsername()); // Log user creation
                     }
+                    employee.setUser(userToSet);
+                    employees.add(employee);
 
-                    Employee employee = new Employee();
-                    employee.setEmployeeNumber(employeeNumber);
-                    employee.setLastName(record.get("Last Name").trim());
-                    employee.setFirstName(record.get("First Name").trim());
-                    employee.setBirthday(LocalDate.parse(record.get("Birthday").trim(), dateFormatter));
-                    employee.setAddress(record.get("Address").trim());
-                    employee.setPhoneNumber(record.get("Phone Number").trim());
-                    employee.setSss(record.get("SSS #").trim());
-                    employee.setPhilhealth(record.get("Philhealth #").trim());
-                    employee.setTin(record.get("TIN #").trim());
-                    employee.setPagibig(record.get("Pag-ibig #").trim());
-                    employee.setStatus(record.get("Status").trim());
-                    employee.setPosition(record.get("Position").trim());
-                    employee.setImmediateSupervisor(record.get("Immediate Supervisor").trim());
-
-                    try {
-                        employee.setBasicSalary(parseBigDecimal(record.get("Basic Salary")));
-                        employee.setRiceSubsidy(parseBigDecimal(record.get("Rice Subsidy")));
-                        employee.setPhoneAllowance(parseBigDecimal(record.get("Phone Allowance")));
-                        employee.setClothingAllowance(parseBigDecimal(record.get("Clothing Allowance")));
-                        employee.setGrossSemiMonthlyRate(parseBigDecimal(record.get("Gross Semi-monthly Rate")));
-                        employee.setHourlyRate(parseBigDecimal(record.get("Hourly Rate")));
-
-                        employees.add(employee); // Add employee to the list *before* setting user
-
-                    } catch (NumberFormatException e) {
-                        System.err.println("Error parsing number for employee: " + employee.getEmployeeNumber());
-                        System.err.println("Problematic record from CSV: " + record);
-                        continue; // Skip to the next CSV record
-                    }
+                } catch (NumberFormatException e) {
+                    logger.error("Error parsing number for employee: {}", employee.getEmployeeNumber());
+                    logger.error("Problematic record from CSV: {}", record);
+                    e.printStackTrace();
+                    return null; // Stop processing if there's a parsing error
                 }
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Error reading employee CSV file: {}", e.getMessage());
             return null;
         }
         return employees;
     }
 
-    private void updateUserAssociations(List<Employee> employees) {
-        for (Employee employee : employees) {
-            String username = employee.getEmployeeNumber();
-            Optional<User> user = userRepository.findByUsername(username);
-            if (user.isPresent()) {
-                employee.setUser(user.get());
-            } else {
-                System.err.println("User not found for employee: " + username);
-            }
-        }
-        employeeRepository.saveAll(employees);
-    }
+    /**
+     * Parses a BigDecimal value from a string, handling various null/empty/whitespace cases.
+     *
+     * @param value The string value to parse.
+     * @return The parsed BigDecimal, or BigDecimal.ZERO if the value is invalid.
+     * @throws NumberFormatException If the value cannot be parsed as a BigDecimal.
+     */
 
     private BigDecimal parseBigDecimal(String value) {
-        if (value == null || value.isEmpty() || value.equalsIgnoreCase("NULL") || value.equalsIgnoreCase("N") || value.equalsIgnoreCase("null")) {
+        if (value == null || value.isEmpty() || value.equalsIgnoreCase("NULL") || value.equalsIgnoreCase("N")
+                || value.equalsIgnoreCase("null")) {
             return BigDecimal.ZERO;
         }
 
@@ -175,13 +199,24 @@ public class DataInitializer implements ApplicationRunner {
         cleanedValue = cleanedValue.replaceAll("\\u00A0", ""); // Remove non-breaking spaces
         cleanedValue = cleanedValue.replaceAll("\\ufeff", ""); // Remove Byte Order Mark (BOM)
 
-        System.out.println("Converting to BigDecimal: \"" + cleanedValue + "\""); // For debugging
-
         try {
             return new BigDecimal(cleanedValue);
         } catch (NumberFormatException e) {
-            System.err.println("Error parsing BigDecimal: \"" + cleanedValue + "\"");
+            logger.error("Error parsing BigDecimal: \"{}\"", cleanedValue);
             throw e; // Re-throw the exception after logging
         }
+    }
+
+    /**
+     * Initializes the attendance data by calling the AttendanceInitializer.
+     */
+    private void initializeAttendances() {
+        attendanceInitializer.initializeAttendances();
+    }
+
+
+    @Override
+    public int getOrder() {
+        return 1; // this current initializer runs first
     }
 }

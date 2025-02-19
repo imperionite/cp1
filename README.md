@@ -20,10 +20,34 @@ The **Phase 1 implementation** serves as the core structure of the payroll syste
 Refer to the following list of links to get an idea what are the REST API endpoints that are developed in the prohject and how HTTP requests are executed in [REST Client extension for Visual Studio Code (VS Code)](https://marketplace.visualstudio.com/items?itemName=humao.rest-client).
 
 - [User: User registration, authentication and fetching users](https://github.com/imperionite/cp1/blob/main/USER_HTTP.md)
+
 - [Employee: Displaying employee information, creating new emploee, etc.](https://github.com/imperionite/cp1/blob/main/EMPLOYEE_HTTP.md)
 
+## Initial Data Source and Application Setup
 
+The initial data utilized by this application is sourced from the Google Sheets provided in the Phase 1 requirements instruction, accessible via this [link](https://sites.google.com/mmdc.mcl.edu.ph/motorph/home). Specifically, the [Employee](https://docs.google.com/spreadsheets/d/1168Un_0b5CPDwDSOH4CWI1m8_-2LpLadX3wAdUNNFOo/edit?usp=sharing) database serves as the foundational dataset. The process of seeding data is accomplished through the use of the `ApplicationRunner`.
 
+### Initial Tables and Data Overview
+
+During the initial execution of the application, several tables and corresponding datasets are established. These tables form the core structure upon which further functionalities will be built.
+
+[![DB Table](https://drive.google.com/uc?export=view&id=15q-BlVABOBybvGhubC-ErDoHHw8MnzPF)](https://drive.google.com/file/d/15q-BlVABOBybvGhubC-ErDoHHw8MnzPF/view?usp=sharing)
+
+#### Users Table
+
+[![Users Table](https://drive.google.com/uc?export=view&id=1eWGZmh_5VubQ87pKTJM5d66fBTGCnxR3)](https://drive.google.com/file/d/1eWGZmh_5VubQ87pKTJM5d66fBTGCnxR3/view?usp=sharing)
+
+#### Employees Table
+
+[![Employees Table](https://drive.google.com/uc?export=view&id=1DXsEzSAfoVljpL56ltlXn_PR0IdVsWi8)](https://drive.google.com/file/d/1DXsEzSAfoVljpL56ltlXn_PR0IdVsWi8/view?usp=sharing)
+
+**prescribed**
+
+[![Employees Table - prescribed](https://drive.google.com/uc?export=view&id=10MqVlvdk2bpgXQQ98vKMz82c36bMePEV)](https://drive.google.com/file/d/10MqVlvdk2bpgXQQ98vKMz82c36bMePEV/view?usp=sharing)
+
+#### Attendance Table
+
+[![Attendance Table](https://drive.google.com/uc?export=view&id=1au5gUECk_yItZT8FVTSU1sj972DgbkB4)](https://drive.google.com/file/d/10MqVlvdk2bpgXQQ98vKMz82c36bMePEV/view?usp=sharing)
 
 ## **Requirements Scope**  
 
@@ -93,6 +117,7 @@ docker run -d --name mysql -p 4306:3306 -e MYSQL_ROOT_PASSWORD=password -e MYSQL
 docker ps
 docker exec -it mysql bash
 mysql -h localhost -u myuser -p mydb
+SELECT * FROM table_name; # basic select query
 # quit mysql
 quit
 # quit interactive mode

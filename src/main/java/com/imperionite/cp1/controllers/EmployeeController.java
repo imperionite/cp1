@@ -30,9 +30,6 @@ public class EmployeeController {
     @Autowired
     private UserService userService;
 
-    // private static final Logger log =
-    // LoggerFactory.getLogger(UserController.class);
-
     @PostMapping
     public ResponseEntity<Employee> createEmployee(@RequestBody Employee employee,
             @AuthenticationPrincipal UserDetails userDetails) {
