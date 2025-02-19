@@ -16,6 +16,12 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
 
     List<Attendance> findByDateBetween(LocalDate startDate, LocalDate endDate);
 
+    @Query("SELECT MIN(a.date) FROM Attendance a") // JPQL query
+    LocalDate findMinDate();
+
+    @Query("SELECT MAX(a.date) FROM Attendance a") // JPQL query
+    LocalDate findMaxDate();
+
     List<Attendance> findByEmployeeNumber(String employeeNumber);
 
     // Optimized query for weekly hours:

@@ -1,25 +1,15 @@
 ### variables
-@access=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMDAzNSIsImlhdCI6MTczOTg1NDcxNSwiZXhwIjoxNzM5ODY1NTE1fQ.I0rDYRgXTYb4eygG506q-84I1M5HSSGpsM8ovc1j_n2fu7xfBBBpb_kEht8Wkj2wkbwxX7AMFI0bIxym1m5XIA
+@employeeAccess=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMDAwMSIsImlhdCI6MTczOTk3MjY4MiwiZXhwIjoxNzM5OTgzNDgyfQ.baRlHtgn3o2In1CLrGWgIL2z2l21e0cC6XXQp7WI-_liJIDTD8ApA22ze5ce9euAkIhjLJXygEPSvTngJkufqw
 @adminAccess=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTczOTg1NDE4OCwiZXhwIjoxNzM5ODY0OTg4fQ.Z0fu7UTwxqCrKFLrGPZr6lkEOsLvco86YmxccaR_wwOlOtn6NVRbihHXzpz7XWvyKJt63YW2-fA_l9I4sM__AA
-####### User and test ############
 
-### register new user (admin only)
-POST http://localhost:8080/api/auth/register HTTP/1.1
-Authorization: Bearer {{adminAccess}}
-Content-Type: application/json
-
-{
-    "username": "10035",
-    "password": "passworD#1"
-}
-
+#####################################################################################################################
 
 ### login (public & all users)
 POST http://localhost:8080/api/auth/login HTTP/1.1
 Content-Type: application/json
 
 {
-    "username": "10035",
+    "username": "10001",
     "password": "passworD#1"
 }
 
@@ -32,26 +22,10 @@ Content-Type: application/json
     "password": "adminPassword"
 }
 
-
-### fetch all users (admin)
-GET http://localhost:8080/api/users/ HTTP/1.1
-Content-Type: application/json
-Authorization: Bearer {{adminAccess}}
-
-
-### test me (auth users)
-GET http://localhost:8080/api/users/me HTTP/1.1
-Content-Type: application/json
-Authorization: Bearer {{access}}
-
-
-
-########## Employee ###########
-
 ### add new employee (admin)
 POST http://localhost:8080/api/employees
-Content-Type: application/json
 Authorization: Bearer {{adminAccess}}
+Content-Type: application/json
 
 {
 "employeeNumber": "10035",
@@ -82,31 +56,30 @@ Authorization: Bearer {{adminAccess}}
 ### Returns a list of AdminEmployeeDTO objects. (admin)
 GET http://localhost:8080/api/employees/admin HTTP/1.1
 Authorization: Bearer {{adminAccess}}
+Content-Type: application/json
 
 
 ### list all employees in full details (admin)
 GET http://localhost:8080/api/employees
-Content-Type: application/json
 Authorization: Bearer {{adminAccess}}
+Content-Type: application/json
 
 ### fetch employee by id (admin)
 GET http://localhost:8080/api/employees/28
-Content-Type: application/json
 Authorization: Bearer {{adminAccess}}
+Content-Type: application/json
 
 ### fetch employee by employee number (admin)
 GET http://localhost:8080/api/employees/employeeNumber/10005
-Content-Type: application/json
 Authorization: Bearer {{adminAccess}}
+Content-Type: application/json
 
 ### fetch all employees basic info as a list (authenticated)
 GET http://localhost:8080/api/employees/basic-info
+Authorization: Bearer {{employeeAccess}}
 Content-Type: application/json
-Authorization: Bearer {{access}}
 
 ### fetch auth user's full employee info (current auth user)
 GET http://localhost:8080/api/employees/me
+Authorization: Bearer {{employeeAccess}}
 Content-Type: application/json
-Authorization: Bearer {{access}}
-
-

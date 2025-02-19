@@ -1,0 +1,61 @@
+### variables
+@employeeAccess=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMDAwMSIsImlhdCI6MTczOTk3NTQxMSwiZXhwIjoxNzM5OTg2MjExfQ.-vjGSJYVw91TkrZaR_LFh-K32X4IBt2L6N6GOu_9NhQpVhdma6N05KPJuMSYz-kK3jqw_AFOKS9mMm5E3iC95A
+@adminAccess=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTczOTg1NDE4OCwiZXhwIjoxNzM5ODY0OTg4fQ.Z0fu7UTwxqCrKFLrGPZr6lkEOsLvco86YmxccaR_wwOlOtn6NVRbihHXzpz7XWvyKJt63YW2-fA_l9I4sM__AA
+
+#####################################################################################################################
+
+### login (public & all users)
+POST http://localhost:8080/api/auth/login HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "10001",
+    "password": "passworD#1"
+}
+
+### login for admin
+POST http://localhost:8080/api/auth/login HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "admin",
+    "password": "adminPassword"
+}
+
+
+### create new attendance (auth user and employee)
+POST http://localhost:8080/api/attendance HTTP/1.1
+Authorization: Bearer {{employeeAccess}}
+Content-Type: application/json
+
+
+{
+ "date": "06/05/2024",     
+  "logIn": "08:30",
+  "logOut": "17:30"     
+}
+
+
+#### attendance retrieval by Employee and Date Range (auth user and employee)
+GET http://localhost:8080/api/attendance/employee/10001?startDate=2024-06-01&endDate=2024-06-10
+Authorization: Bearer {{employeeAccess}}
+Content-Type: application/json
+
+
+#### retrieves attendance records for all employees within a date range (admin only)
+GET http://localhost:8080/api/attendance/admin?startDate=2024-06-01&endDate=2024-06-10
+Authorization: Bearer {{adminAccess}}
+Content-Type: application/json
+
+#### list of actual start and end dates of the available weeks (Auth users)
+GET http://localhost:8080/api/attendance/weekly-cutoffs
+Authorization: Bearer {{employeeAccess}}
+Content-Type: application/json
+
+#### calculate weekly hours (Auth users)
+GET http://localhost:8080/api/attendance/employee/10034/weekly-hours?startDate=2024-09-23&endDate=2024-09-29
+Authorization: Bearer {{employeeAccess}}
+Content-Type: application/json
+
+
+

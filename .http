@@ -1,34 +1,9 @@
 ### variables
-@adminAccess=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTczOTg1NDE4OCwiZXhwIjoxNzM5ODY0OTg4fQ.Z0fu7UTwxqCrKFLrGPZr6lkEOsLvco86YmxccaR_wwOlOtn6NVRbihHXzpz7XWvyKJt63YW2-fA_l9I4sM__AA
-@normalAccess=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMDAzNCIsImlhdCI6MTczOTg0NjA5OSwiZXhwIjoxNzM5ODU2ODk5fQ.UifZALRObWl876VFgKv7XPnDWXsanpC-oJt4Jg4KxtvSXL5RV0LmrozWn6ATM3Hlm9demMnlnZTdzRsjWA-Twg
+@adminAccess=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTczOTk3MTg1MCwiZXhwIjoxNzM5OTgyNjUwfQ.DeHnCf360tuTbNvHKjk2_RMErz2MQt2yoqQ1Lkme1cvmgP8UAzPAU-73Vk64s6NcWzB9KTSm16QtulJ43quVMQ
+@normalAccess=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMDAwMSIsImlhdCI6MTczOTk3NTQxMSwiZXhwIjoxNzM5OTg2MjExfQ.-vjGSJYVw91TkrZaR_LFh-K32X4IBt2L6N6GOu_9NhQpVhdma6N05KPJuMSYz-kK3jqw_AFOKS9mMm5E3iC95A
 #################### START ########################
 
-### add new employee (admin)
-POST http://localhost:8080/api/employees
+#### calculate weekly work hours (Auth users)
+GET http://localhost:8080/api/attendance/employee/10034/weekly-hours?startDate=2024-09-23&endDate=2024-09-29
+Authorization: Bearer {{normalAccess}}
 Content-Type: application/json
-Authorization: Bearer {{adminAccess}}
-
-{
-"employeeNumber": "10035",
-  "lastName": "Alert",
-  "firstName": "Amber",
-  "birthday": "1980-11-22",
-  "address": "19 Global City, Taguig",
-  "phoneNumber": "797-109-111",
-  "sss": "44-2400689-6",
-  "philhealth": "539192926451",
-  "tin": "642-454-690-000",
-  "pagibig": "810850209333",
-  "status": "Regular",
-  "position": "Corporate Data Scientist",
-  "immediateSupervisor": "Lim, Antonio",
-  "basicSalary": 60000,
-  "riceSubsidy": 1500,
-  "phoneAllowance": 2000,
-  "clothingAllowance": 1000,
-  "grossSemiMonthlyRate": 30000,
-  "hourlyRate": 357.14,
-  "user": {
-    "id": 36
-  }
-}
