@@ -35,7 +35,7 @@ Refer to the following list of links to get an idea what are the REST API endpoi
     -  [Sample Employees Requests](https://github.com/imperionite/cp1/blob/main/employees.http)
 
 3. [Attendance: Calculating employee's work hours, retrieving available weekly weekly cut-offs, displaying attendance records, creating new attendance](https://github.com/imperionite/cp1/blob/main/ATTENDANCE_HTTP.md)
-    -  [Sample Employees Requests](https://github.com/imperionite/cp1/blob/main/attendance.http)
+    -  [Sample Attendance Requests](https://github.com/imperionite/cp1/blob/main/attendance.http)
 
 ---
 
