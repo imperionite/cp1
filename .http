@@ -1,9 +1,9 @@
 ### variables
 @adminAccess=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTczOTk3MTg1MCwiZXhwIjoxNzM5OTgyNjUwfQ.DeHnCf360tuTbNvHKjk2_RMErz2MQt2yoqQ1Lkme1cvmgP8UAzPAU-73Vk64s6NcWzB9KTSm16QtulJ43quVMQ
-@normalAccess=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMDAwMSIsImlhdCI6MTczOTk3NTQxMSwiZXhwIjoxNzM5OTg2MjExfQ.-vjGSJYVw91TkrZaR_LFh-K32X4IBt2L6N6GOu_9NhQpVhdma6N05KPJuMSYz-kK3jqw_AFOKS9mMm5E3iC95A
+@employeeAccess=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMDAwMSIsImlhdCI6MTc0MDAyMjY0MSwiZXhwIjoxNzQwMDMzNDQxfQ.0jbMM0_S8YRcJaBwwRwNklpalOMDYYAOqpRVgQ12obKpLGBai8cVIE5JDMfYluhQdnXQLcwXZEiTZ19kWYpDlg
 #################### START ########################
 
-#### calculate weekly work hours (Auth users)
-GET http://localhost:8080/api/attendance/employee/10034/weekly-hours?startDate=2024-09-23&endDate=2024-09-29
-Authorization: Bearer {{normalAccess}}
+#### calculate weekly hours (Auth users)
+GET http://localhost:8080/api/attendance/employee/10034/weekly-hours?startDate=2024-09-25&endDate=2024-09-29
+Authorization: Bearer {{employeeAccess}}
 Content-Type: application/json
