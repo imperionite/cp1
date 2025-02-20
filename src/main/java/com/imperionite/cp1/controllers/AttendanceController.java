@@ -22,7 +22,9 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -108,7 +110,8 @@ public class AttendanceController {
      *         Returns a 401 Unauthorized if the user is not logged in.
      */
     @GetMapping("/weekly-cutoffs")
-    public ResponseEntity<List<WeeklyCutoffDTO>> getWeeklyCutoffs(@AuthenticationPrincipal UserDetails userDetails) { // Use WeeklyCutoffDTO
+    public ResponseEntity<List<WeeklyCutoffDTO>> getWeeklyCutoffs(@AuthenticationPrincipal UserDetails userDetails) { // Use
+                                                                                                                      // WeeklyCutoffDTO
         if (userDetails == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // Check if user is logged in
         }
@@ -160,15 +163,15 @@ public class AttendanceController {
         return ResponseEntity.ok(attendances);
     }
 
-     /**
+    /**
      * Calculates the total work hours for a specific employee within a given week.
      * Accessible by employees themselves and admins. Employees can only access their own
-     * records.
+     * records.  Returns the result in JSON format: {"total_weekly_worked_hours": value}.
      *
      * @param employeeNumber The employee number.
      * @param startDate      The start date (Monday) of the week.
      * @param endDate        The end date (Sunday) of the week.
-     * @return A ResponseEntity containing the total work hours (as a double) or an error message.
+     * @return A ResponseEntity containing the total work hours in JSON format or an error message.
      */
     @GetMapping("/employee/{employeeNumber}/weekly-hours")
     @PreAuthorize("#employeeNumber == authentication.name or hasRole('ADMIN')")
@@ -179,15 +182,23 @@ public class AttendanceController {
 
         try {
             double totalHours = attendanceService.calculateWeeklyHours(employeeNumber, startDate, endDate);
-            return ResponseEntity.ok(totalHours);
+
+            // Create a JSON response
+            Map<String, Double> response = new HashMap<>();
+            response.put("total_weekly_worked_hours", totalHours);
+
+            return ResponseEntity.ok(response); // Return the JSON response
+
+        } catch (IllegalArgumentException e) { // Catch date validation errors
+            logger.error("Invalid date range provided: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage()); // Return the specific error message
+
         } catch (Exception e) {
             logger.error("Error calculating weekly hours: {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error calculating weekly hours: " + e.getMessage());
         }
     }
-
-
-    
 
 }

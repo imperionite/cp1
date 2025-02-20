@@ -25,7 +25,7 @@ GET /api/attendance/weekly-cutoffs
 
 GET /api/attendance/employee/{employeeNumber}/weekly-hours?startDate={startDate}&endDate={endDate}
 
-![work hours](https://drive.google.com/uc?id=1nApBxXjhiDN3yVt9TfM3Bd_u7ot-0D_x)
+![worked hours](https://drive.google.com/uc?id=1JBipwkb8e4e_duNIMi2NTNbs8PaUX9O6)
 
 ## List all employees attendance records date range - Admin only
 
