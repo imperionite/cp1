@@ -17,4 +17,4 @@ GET /api/users/
 
 POST /api/auth/login
 
-![login](https://drive.google.com/uc?id=1yGmblHWAA59NYvlz6Kxfk6u-phq88783)
+![login](https://drive.google.com/uc?id=1khEwUKKgZEJeLSIhdqJzcBQPicD5C39k)
