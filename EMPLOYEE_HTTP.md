@@ -8,7 +8,7 @@ POST /api/employees
 ![create employee](https://drive.google.com/uc?id=1f6_0-idIPrgjI1ak5RAigIa0ytp57vj2)
 
 
-## Current user full employees dettails - Auth user
+## Current user full employees details - Auth user
 
 GET /api/employees/me
 

@@ -8,11 +8,11 @@ POST /api/attendance
 ![create employee](https://drive.google.com/uc?id=1NwBgiemUU7p9izZS3QDf5tGCd5Kz9IuV)
 
 
-## Attendance retrieval by Employee and Date Range - Auth user/employee
+## Attendance retrieval by Employee and Date Range - Auth user/employee only (as not all users are employees)
 
 GET /api/attendance/employee/10001?startDate={startDate}&endDate={endDate}
 
-![retrieve attendance](https://drive.google.com/uc?id=1NwBgiemUU7p9izZS3QDf5tGCd5Kz9IuV)
+![retrieve attendance](https://drive.google.com/uc?id=1aQQuCY5HyRZTVm8TpGOPxBepm1eWf3Hv)
 
 ## Weekly Cuteoffs - Auth user
 
@@ -21,13 +21,13 @@ GET /api/attendance/weekly-cutoffs
 ![weekly cutoff](https://drive.google.com/uc?id=1ncKk2EFVDHjWEdAbJhQPjA_j8e5hrs0X)
 
 
-## Calculate weekly work hours - Auth only
+## Calculate weekly work hours - Auth user
 
 GET /api/attendance/employee/{employeeNumber}/weekly-hours?startDate={startDate}&endDate={endDate}
 
 ![work hours](https://drive.google.com/uc?id=1nApBxXjhiDN3yVt9TfM3Bd_u7ot-0D_x)
 
-## List all employees attendance records Date Range - Admin only
+## List all employees attendance records date range - Admin only
 
 GET /api/attendance/admin?startDate={startDate}&endDate={endDate}
 
