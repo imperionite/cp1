@@ -3,12 +3,14 @@ package com.imperionite.cp1.services;
 
 import com.imperionite.cp1.dtos.WeeklyCutoffDTO;
 import com.imperionite.cp1.entities.Attendance;
+import com.imperionite.cp1.entities.Employee;
 import com.imperionite.cp1.repositories.AttendanceRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -22,6 +24,9 @@ public class AttendanceService {
 
     @Autowired
     private AttendanceRepository attendanceRepository;
+
+    @Autowired
+    private EmployeeService employeeService;
 
 
     /**
@@ -117,6 +122,34 @@ public class AttendanceService {
         }
 
         return weeklyCutoffs;
+    }
+
+    /**
+     * Calculates the gross weekly salary for a specific employee.
+     * Considers basic salary, hourly rate, and worked hours.
+     *
+     * @param employeeNumber The employee number of the employee.
+     * @param startDate      The start date (Monday) of the week.
+     * @param endDate        The end date (Sunday) of the week.
+     * @return The gross weekly salary as a BigDecimal.
+     * @throws IllegalArgumentException If the date range is invalid or employee is not found.
+     */
+    public BigDecimal calculateGrossWeeklySalary(String employeeNumber, LocalDate startDate, LocalDate endDate) {
+        if (!startDate.getDayOfWeek().equals(DayOfWeek.MONDAY) || !endDate.getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
+            throw new IllegalArgumentException("Start date must be a Monday and end date must be a Sunday.");
+        }
+
+        Employee employee = employeeService.getEmployeeByEmployeeNumber(employeeNumber)
+                .orElseThrow(() -> new IllegalArgumentException("Employee not found."));
+
+        double totalHours = calculateWeeklyHours(employeeNumber, startDate, endDate);
+
+        BigDecimal hourlyRate = employee.getHourlyRate();  // Use hourly rate from Employee entity
+
+        // Calculate gross weekly salary (hourly rate * total hours)
+        BigDecimal grossWeeklySalary = hourlyRate.multiply(BigDecimal.valueOf(totalHours));
+
+        return grossWeeklySalary;
     }
 
 }

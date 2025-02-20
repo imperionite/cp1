@@ -1,5 +1,5 @@
 ### variables
-@employeeAccess=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMDAwMSIsImlhdCI6MTczOTk3NTQxMSwiZXhwIjoxNzM5OTg2MjExfQ.-vjGSJYVw91TkrZaR_LFh-K32X4IBt2L6N6GOu_9NhQpVhdma6N05KPJuMSYz-kK3jqw_AFOKS9mMm5E3iC95A
+@employeeAccess=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMDAwMSIsImlhdCI6MTc0MDAyNTczMiwiZXhwIjoxNzQwMDM2NTMyfQ.vBW3bI-5EYcWqjqXxzNXO3-Pjzima7Zy0DUINg7MKyFtxzLGgrGHmSOq2Fxwg2JthDBdlazT_tJl8_TE4-yqrQ
 @adminAccess=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTczOTg1NDE4OCwiZXhwIjoxNzM5ODY0OTg4fQ.Z0fu7UTwxqCrKFLrGPZr6lkEOsLvco86YmxccaR_wwOlOtn6NVRbihHXzpz7XWvyKJt63YW2-fA_l9I4sM__AA
 
 #####################################################################################################################
@@ -52,8 +52,13 @@ GET http://localhost:8080/api/attendance/weekly-cutoffs
 Authorization: Bearer {{employeeAccess}}
 Content-Type: application/json
 
-#### calculate weekly hours (Auth users)
+#### calculate weekly worked hours (Auth users)
 GET http://localhost:8080/api/attendance/employee/10034/weekly-hours?startDate=2024-09-23&endDate=2024-09-29
+Authorization: Bearer {{employeeAccess}}
+Content-Type: application/json
+
+#### calculate gross weekly salary (Auth users or Admin)
+GET http://localhost:8080/api/attendance/employee/weekly-salary?startDate=2024-09-23&endDate=2024-09-29
 Authorization: Bearer {{employeeAccess}}
 Content-Type: application/json
 

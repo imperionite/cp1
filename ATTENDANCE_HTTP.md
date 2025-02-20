@@ -37,3 +37,10 @@ GET /api/attendance/admin?startDate={startDate}&endDate={endDate}
 
 ![incorrect date range](https://drive.google.com/uc?id=1Rij1Pq4msYtKogC82LfbS1HwsKorcWmt)
 
+## Gross weekly salary calculation - Auth user/Admin
+
+![gross salary](https://drive.google.com/uc?id=1zMbdkreHvxHfwoAiqgR03KyRqoytWVgA)
+
+## Gross weekly salary date not in range
+
+![gross salary](https://drive.google.com/uc?id=1UwpkNhi_NM2wulYEKwt21d57mj60RpPq)

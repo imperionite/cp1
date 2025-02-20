@@ -18,6 +18,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -200,5 +201,49 @@ public class AttendanceController {
                     .body("Error calculating weekly hours: " + e.getMessage());
         }
     }
+
+    /**
+     * Calculates the gross weekly salary for the authenticated employee based on
+     * the hours worked. Accessible by employees themselves and admins. Employees
+     * can only calculate their own salary. Returns the result in JSON format:
+     * {"gross_weekly_salary": value}.
+     *
+     * @param userDetails The currently authenticated user's details.
+     * @param startDate   The start date (Monday) of the week.
+     * @param endDate     The end date (Sunday) of the week.
+     * @return A ResponseEntity containing the gross weekly salary in JSON format
+     *         or an error message.
+     */
+    @GetMapping("/employee/weekly-salary")
+    public ResponseEntity<?> calculateGrossWeeklySalary(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+
+        if (userDetails == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); 
+        }
+
+        String loggedInEmployeeNumber = userDetails.getUsername();
+
+        try {
+            BigDecimal grossWeeklySalary = attendanceService.calculateGrossWeeklySalary(loggedInEmployeeNumber, startDate, endDate);
+
+            Map<String, BigDecimal> response = new HashMap<>();
+            response.put("gross_weekly_salary", grossWeeklySalary);
+
+            return ResponseEntity.ok(response);
+
+        } catch (IllegalArgumentException e) {
+            logger.error("Invalid date range or employee: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+
+        } catch (Exception e) {
+            logger.error("Error calculating gross weekly salary: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error calculating gross weekly salary: " + e.getMessage());
+        }
+    }
+
 
 }
