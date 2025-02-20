@@ -14,6 +14,7 @@ docker run -d --name mysql -p 4306:3306 -e MYSQL_ROOT_PASSWORD=password -e MYSQL
 docker ps
 docker exec -it mysql bash
 mysql -h localhost -u myuser -p mydb
+SHOW TABLES;
 SELECT * FROM table_name; # basic select query
 # quit mysql
 quit

@@ -24,7 +24,7 @@ This project is designed as a RESTful API rather than a Java console application
 
 ---
 
-## **REST API Endpoints**
+## **REST API Endpoints & Manual API Tests**
 
 Refer to the following list of links to get an idea what are the REST API endpoints that are developed in the prohject and how HTTP requests are executed in [REST Client extension for Visual Studio Code (VS Code)](https://marketplace.visualstudio.com/items?itemName=humao.rest-client).
 
@@ -57,7 +57,7 @@ The application uses an `ApplicationRunner` to seed the database with initial da
 
 During the initial execution of the application, several tables and corresponding datasets are established. These tables form the core structure upon which further functionalities will be built.
 
-[![DB Table](https://drive.google.com/uc?export=view&id=15q-BlVABOBybvGhubC-ErDoHHw8MnzPF)](https://drive.google.com/file/d/15q-BlVABOBybvGhubC-ErDoHHw8MnzPF/view?usp=sharing)
+[![DB Table](https://drive.google.com/uc?export=view&id=1eWGZmh_5VubQ87pKTJM5d66fBTGCnxR3)](https://drive.google.com/file/d/1eWGZmh_5VubQ87pKTJM5d66fBTGCnxR3/view?usp=sharing)
 
 #### Users Table
 
