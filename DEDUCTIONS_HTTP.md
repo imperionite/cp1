@@ -6,7 +6,7 @@ This section compiles the screenshots captured during the testing of REST API en
 
 ## Retrieving weekly PhilHealth contribution - Auth user/Admin
 
-![philHealth](https://drive.google.com/1VtZpl-CrXjyyrJ__qWJSM8eylMyr0baq)
+![philhealth](https://drive.google.com/uc?id=1VtZpl-CrXjyyrJ__qWJSM8eylMyr0baq)
 
 ## Retrieving weekly Pag Ibig contribution - Auth user/Admin
 
