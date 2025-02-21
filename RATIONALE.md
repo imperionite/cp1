@@ -27,6 +27,9 @@ This API provides a way to retrieve the available weekly cut-off periods for att
 
 **Rationale:** Providing these pre-calculated weekly cut-offs simplifies the user experience. Users don't need to manually determine the start and end dates for each week; the API provides them with the available options based on existing attendance data. This also ensures consistency and avoids potential errors from manually entered dates.
 
+---
+
+## Deductions
 
 ```markdown
 ## Weekly Deductions and Contributions Implementation

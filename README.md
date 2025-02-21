@@ -4,7 +4,7 @@ A MotorPH Payroll System - Phase 1 coding project.
 
 ## **Project Description**
 
-The **MotorPH Payroll System - Phase 1** is a foundational implementation of an employee payroll system built using **Spring Boot** and **MySQL**. The primary objective of this phase is to **automate the calculation of employee salaries** while ensuring an accurate presentation of employee details. This project derives from the requirements identification phase outlined in Phase 1, accessible via this [link](https://github.com/imperionite/cp1ms1/blob/main/MO-IT101%20Milestone%201_Imperial%20%2C%20Arnel_H1101_2nd%20Term_2024-2025.md).
+The **MotorPH Payroll System - Phase 1** is a foundational implementation of an employee payroll system built using **Spring Boot** and **MySQL**. The primary objective of this phase is to **automate the calculation of employee salaries** while ensuring an accurate presentation of employee details. This project derives from the requirements identification phase outlined in Phase 1, accessible via this [link](https://github.com/imperionite/cp1ms1/blob/main/MO-IT101%20Milestone%201_Imperial%20%2C%20Arnel_H1101_2nd%20Term_2024-2025.md). Refer to the [RATIONALE.md](https://github.com/imperionite/cp1/blob/main/RATIONALE.md) to know more about the essential aspects of the project.
 
 This system is designed to:  
 ✔️ **Display employee information** (employee number, name, and birthday).  
