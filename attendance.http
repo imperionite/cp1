@@ -47,7 +47,7 @@ GET http://localhost:8080/api/attendance/admin?startDate=2024-06-01&endDate=2024
 Authorization: Bearer {{adminAccess}}
 Content-Type: application/json
 
-#### list of actual start and end dates of the available weeks (Auth users)
+#### list of start data and end date per week (Auth users)
 GET http://localhost:8080/api/attendance/weekly-cutoffs HTTP/1.1
 Authorization: Bearer {{employeeAccess}}
 Content-Type: application/json

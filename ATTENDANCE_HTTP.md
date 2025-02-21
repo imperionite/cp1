@@ -13,7 +13,7 @@ GET /api/attendance/employee/10001?startDate={startDate}&endDate={endDate}
 
 ![retrieve attendance](https://drive.google.com/uc?id=1aQQuCY5HyRZTVm8TpGOPxBepm1eWf3Hv)
 
-## Weekly Cuteoffs - Auth user
+## List of weekly cut-offs and available start datae and end date - Auth user
 
 GET /api/attendance/weekly-cutoffs
 
