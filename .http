@@ -1,19 +1,10 @@
 ### variables
 @adminAccess=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTczOTk3MTg1MCwiZXhwIjoxNzM5OTgyNjUwfQ.DeHnCf360tuTbNvHKjk2_RMErz2MQt2yoqQ1Lkme1cvmgP8UAzPAU-73Vk64s6NcWzB9KTSm16QtulJ43quVMQ
-@employeeAccess=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMDAwMSIsImlhdCI6MTc0MDA0MDI2OSwiZXhwIjoxNzQwMDUxMDY5fQ.tCO2v2zMo8e2niYr5A1VCylgHFfrjqfdI1IWvys2jn4oumFhXo2f1iC7VhnEWEoXzWpSodDuLLMKGgHLdyQC_g
+@employeeAccess=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMDAwMSIsImlhdCI6MTc0MDExMTc2NCwiZXhwIjoxNzQwMTIyNTY0fQ.a6ON84i5iREzBagx1vN1vzTrIRJ7yNAs8P9j57CJn8EtQftV7cVHTIvXftg_HFtJIkqAWpFnwZ8W3LWf-IZvjg
 #################### START ########################
 
-### weekly Withholding Tax deduction
-POST http://localhost:8080/api/attendance/employee/withholding-tax HTTP/1.1
+### weekly Pag Ibig deduction - Auth user/employee
+GET http://localhost:8080/api/deductions/pagibig?startDate=2024-08-12&endDate=2024-08-18 HTTP/1.1
 Authorization: Bearer {{employeeAccess}}
 Content-Type: application/json
-
-{
-  "grossWeeklySalary": 24412.30,  
-  "sssDeduction": 281.25,        
-  "pagibigDeduction": 25,      
-  "philhealthDeduction": 225,   
-  "startDate": "2024-08-12",   
-  "endDate": "2024-08-18" 
-}
 

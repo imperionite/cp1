@@ -1,5 +1,4 @@
-This section compiles the screenshots captured during the testing of REST API endpoints specifically related to `attendance`. These endpoints are integral to fulfilling the requirements of MotorPH PHASE 1, which involves developing solutions using Java or Java-based technologies. In this instance, the implementation utilizes the Spring Boot framework to create the REST API. The tests were performed by executing actual HTTP requests through the [REST Client extension for Visual Studio Code (VS Code)](https://marketplace.visualstudio.com/items?itemName=humao.rest-client).
-
+This section compiles the screenshots captured during the testing of REST API endpoints specifically related to `attendance`. These endpoints are integral to fulfilling the requirements of MotorPH PHASE 1, which involves developing solutions using Java or Java-based technologies. In this instance, the implementation utilizes the Spring Boot framework to create the REST API. 
 
 ## Create new attendance - Admin only
 
@@ -37,10 +36,3 @@ GET /api/attendance/admin?startDate={startDate}&endDate={endDate}
 
 ![incorrect date range](https://drive.google.com/uc?id=1Rij1Pq4msYtKogC82LfbS1HwsKorcWmt)
 
-## Gross weekly salary calculation - Auth user/Admin
-
-![gross salary](https://drive.google.com/uc?id=1zMbdkreHvxHfwoAiqgR03KyRqoytWVgA)
-
-## Gross weekly salary (invalid dates)
-
-![gross salary](https://drive.google.com/uc?id=1UwpkNhi_NM2wulYEKwt21d57mj60RpPq)
