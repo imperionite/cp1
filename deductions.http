@@ -1,0 +1,44 @@
+### variables
+@employeeAccess=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMDAwMSIsImlhdCI6MTc0MDEwNDQ0MCwiZXhwIjoxNzQwMTE1MjQwfQ.UDN-1FK6cAppW6hey4d0ISuL8YS_eiwbIwnQdwxJJRuuvjs8ls8Vs9KXuNK6hWOXBnD1GErJkvLQs7Smatjwfg
+@adminAccess=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc0MDA3MjUzOSwiZXhwIjoxNzQwMDgzMzM5fQ.6DD23EjvGdcz1M88txzykppXLup1I3NQdPW3VtRMGcdpP5TWAUkPA1oowEJugMYriqP19PaEpPDLnHcaV3OYAw
+
+#####################################################################################################################
+
+### login (public & all users)
+POST http://localhost:8080/api/auth/login HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "10001",
+    "password": "passworD#1"
+}
+
+### login for admin
+POST http://localhost:8080/api/auth/login HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "admin",
+    "password": "adminPassword"
+}
+
+### weekly SSS deductions
+GET http://localhost:8080/api/deductions/sss?startDate=2024-08-12&endDate=2024-08-18 HTTP/1.1
+Authorization: Bearer {{employeeAccess}}
+Content-Type: application/json
+
+
+### weekly PhilHealth deductions
+GET http://localhost:8080/api/deductions/philhealth?startDate=2024-08-12&endDate=2024-08-18 HTTP/1.1
+Authorization: Bearer {{employeeAccess}}
+Content-Type: application/json
+
+### weekly Pag Ibig deduction
+GET http://localhost:8080/api/deductions/pagibig?startDate=2024-08-12&endDate=2024-08-18 HTTP/1.1
+Authorization: Bearer {{employeeAccess}}
+Content-Type: application/json
+
+### weekly withholding tax
+GET http://localhost:8080/api/deductions/weekly-withholding-tax?employeeNumber=10001&startDate=2024-07-29&endDate=2024-08-04 HTTP/1.1
+Authorization: Bearer {{employeeAccess}}
+Content-Type: application/json

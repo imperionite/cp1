@@ -10,6 +10,12 @@ The **MotorPH Payroll System - Phase 1** is a foundational implementation of an 
 # pull postgres image and run the container named mysql
 docker run -d --name mysql -p 4306:3306 -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=mydb -e MYSQL_USER=myuser -e MYSQL_PASSWORD=mypassword -v mysql-data:/var/lib/mysql mysql:8.0.40
 
+# stop container
+docker stop mysql
+
+# restart container in detach mode
+docker start mysql
+
 # accessing the Running MySQL container
 docker ps
 docker exec -it mysql bash

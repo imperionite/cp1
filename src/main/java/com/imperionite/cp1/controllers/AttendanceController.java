@@ -31,9 +31,9 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/attendance")
 public class AttendanceController {
-    private static final Logger logger = LoggerFactory.getLogger(AttendanceController.class);
+    private static final Logger logger = LoggerFactory.getLogger(AttendanceController.class); // Logger
 
-    @Autowired // Add this! This was missing
+    @Autowired
     private EmployeeService employeeService;
 
     @Autowired
@@ -166,13 +166,16 @@ public class AttendanceController {
 
     /**
      * Calculates the total work hours for a specific employee within a given week.
-     * Accessible by employees themselves and admins. Employees can only access their own
-     * records.  Returns the result in JSON format: {"total_weekly_worked_hours": value}.
+     * Accessible by employees themselves and admins. Employees can only access
+     * their own
+     * records. Returns the result in JSON format: {"total_weekly_worked_hours":
+     * value}.
      *
      * @param employeeNumber The employee number.
      * @param startDate      The start date (Monday) of the week.
      * @param endDate        The end date (Sunday) of the week.
-     * @return A ResponseEntity containing the total work hours in JSON format or an error message.
+     * @return A ResponseEntity containing the total work hours in JSON format or an
+     *         error message.
      */
     @GetMapping("/employee/{employeeNumber}/weekly-hours")
     @PreAuthorize("#employeeNumber == authentication.name or hasRole('ADMIN')")
@@ -182,18 +185,18 @@ public class AttendanceController {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
 
         try {
-            double totalHours = attendanceService.calculateWeeklyHours(employeeNumber, startDate, endDate);
+            BigDecimal totalHours = attendanceService.calculateWeeklyHours(employeeNumber, startDate, endDate);
 
-            // Create a JSON response
-            Map<String, Double> response = new HashMap<>();
-            response.put("total_weekly_worked_hours", totalHours);
+            // Use BigDecimal consistently
+            Map<String, BigDecimal> response = new HashMap<>();
+            response.put("total_weekly_worked_hours", totalHours); // Correct type
 
-            return ResponseEntity.ok(response); // Return the JSON response
+            return ResponseEntity.ok(response);
 
-        } catch (IllegalArgumentException e) { // Catch date validation errors
+        } catch (IllegalArgumentException e) {
             logger.error("Invalid date range provided: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(e.getMessage()); // Return the specific error message
+                    .body(e.getMessage());
 
         } catch (Exception e) {
             logger.error("Error calculating weekly hours: {}", e.getMessage(), e);
@@ -201,49 +204,5 @@ public class AttendanceController {
                     .body("Error calculating weekly hours: " + e.getMessage());
         }
     }
-
-    /**
-     * Calculates the gross weekly salary for the authenticated employee based on
-     * the hours worked. Accessible by employees themselves and admins. Employees
-     * can only calculate their own salary. Returns the result in JSON format:
-     * {"gross_weekly_salary": value}.
-     *
-     * @param userDetails The currently authenticated user's details.
-     * @param startDate   The start date (Monday) of the week.
-     * @param endDate     The end date (Sunday) of the week.
-     * @return A ResponseEntity containing the gross weekly salary in JSON format
-     *         or an error message.
-     */
-    @GetMapping("/employee/weekly-salary")
-    public ResponseEntity<?> calculateGrossWeeklySalary(
-            @AuthenticationPrincipal UserDetails userDetails,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
-
-        if (userDetails == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); 
-        }
-
-        String loggedInEmployeeNumber = userDetails.getUsername();
-
-        try {
-            BigDecimal grossWeeklySalary = attendanceService.calculateGrossWeeklySalary(loggedInEmployeeNumber, startDate, endDate);
-
-            Map<String, BigDecimal> response = new HashMap<>();
-            response.put("gross_weekly_salary", grossWeeklySalary);
-
-            return ResponseEntity.ok(response);
-
-        } catch (IllegalArgumentException e) {
-            logger.error("Invalid date range or employee: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-
-        } catch (Exception e) {
-            logger.error("Error calculating gross weekly salary: {}", e.getMessage(), e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error calculating gross weekly salary: " + e.getMessage());
-        }
-    }
-
 
 }

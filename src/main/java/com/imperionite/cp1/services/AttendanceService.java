@@ -1,21 +1,23 @@
 //AttendanceService.java
 package com.imperionite.cp1.services;
 
-import com.imperionite.cp1.dtos.WeeklyCutoffDTO;
-import com.imperionite.cp1.entities.Attendance;
-import com.imperionite.cp1.entities.Employee;
-import com.imperionite.cp1.repositories.AttendanceRepository;
+import java.math.BigDecimal;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
+import java.math.RoundingMode;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
+import com.imperionite.cp1.dtos.WeeklyCutoffDTO;
+import com.imperionite.cp1.entities.Attendance;
+import com.imperionite.cp1.repositories.AttendanceRepository;
 
 @Service
 public class AttendanceService {
@@ -24,10 +26,6 @@ public class AttendanceService {
 
     @Autowired
     private AttendanceRepository attendanceRepository;
-
-    @Autowired
-    private EmployeeService employeeService;
-
 
     /**
      * Saves a new attendance record.
@@ -39,8 +37,6 @@ public class AttendanceService {
         logger.debug("Attendance record saved: {}", attendance);
     }
 
-
-
     /**
      * Retrieves attendance records for a specific employee within a date range.
      *
@@ -50,7 +46,7 @@ public class AttendanceService {
      * @return A list of Attendance objects.
      */
     public List<Attendance> getAttendanceByEmployeeAndDateRange(String employeeNumber, LocalDate startDate,
-                                                              LocalDate endDate) {
+            LocalDate endDate) {
         logger.debug("Getting attendance for employee {} between {} and {}", employeeNumber, startDate, endDate);
         return attendanceRepository.findByEmployeeNumberAndDateBetween(employeeNumber, startDate, endDate);
     }
@@ -67,30 +63,66 @@ public class AttendanceService {
         return attendanceRepository.findByDateBetween(startDate, endDate);
     }
 
-
-
     /**
-     * Calculates the total work hours for a specific employee within a given week.
-     *
+     * Calculates the total work hours for a specific employee within a given week,
+     * considering a 10-minute grace period for late login.
+     * 
+     * For each day, the total worked hours are calculated by subtracting the login
+     * time from the logout time. If the employee logs in after the grace period
+     * (8:10 AM), the minutes they are late are deducted from their worked hours.
+     * 
      * @param employeeNumber The employee number.
      * @param startDate      The start date (Monday) of the week.
      * @param endDate        The end date (Sunday) of the week.
-     * @return The total work hours as a double.
-     * @throws IllegalArgumentException If the provided dates are not a Monday-Sunday week.
+     * @return The total worked hours in BigDecimal format, including deductions for
+     *         late login.
+     * @throws IllegalArgumentException If the provided dates are not a valid
+     *                                  Monday-Sunday week.
      */
-    public double calculateWeeklyHours(String employeeNumber, LocalDate startDate, LocalDate endDate) {
+    public BigDecimal calculateWeeklyHours(String employeeNumber, LocalDate startDate, LocalDate endDate) {
+        // Validate that the week is Monday to Sunday
         if (!startDate.getDayOfWeek().equals(DayOfWeek.MONDAY) || !endDate.getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
             throw new IllegalArgumentException("Start date must be a Monday and end date must be a Sunday.");
         }
 
+        // Fetch attendance records for the given week
         List<Attendance> attendances = attendanceRepository.findAttendancesForWeek(employeeNumber, startDate, endDate);
 
-        return attendances.stream()
-                .mapToDouble(a -> ChronoUnit.MINUTES.between(a.getLogIn(), a.getLogOut()) / 60.0) // Convert to hours
-                .sum();
+        // Initialize total worked hours (in BigDecimal)
+        BigDecimal totalWorkedHours = BigDecimal.ZERO;
+
+        // Define the grace period end time (8:10 AM)
+        LocalTime gracePeriodEndTime = LocalTime.of(8, 10); // 8:10 AM
+
+        // Iterate over the attendance records and calculate the worked hours
+        for (Attendance attendance : attendances) {
+            // Calculate the total worked minutes (logOut - logIn)
+            long minutesWorked = ChronoUnit.MINUTES.between(attendance.getLogIn(), attendance.getLogOut());
+            BigDecimal workedHours = new BigDecimal(minutesWorked).divide(BigDecimal.valueOf(60), 2,
+                    RoundingMode.HALF_UP);
+
+            // Extract the login time (logIn is already a LocalTime, so no need to use
+            // toLocalTime())
+            LocalTime loginTime = attendance.getLogIn();
+
+            // Check if the employee logged in after the grace period (8:10 AM)
+            if (loginTime.isAfter(gracePeriodEndTime)) {
+                // Calculate how many minutes the employee was late
+                long minutesLate = ChronoUnit.MINUTES.between(gracePeriodEndTime, loginTime);
+
+                // Calculate deduction: Deduct the late minutes from the total worked hours
+                BigDecimal deduction = new BigDecimal(minutesLate).divide(BigDecimal.valueOf(60), 2,
+                        RoundingMode.HALF_UP);
+                workedHours = workedHours.subtract(deduction);
+            }
+
+            // Accumulate the total worked hours for the week
+            totalWorkedHours = totalWorkedHours.add(workedHours);
+        }
+
+        // Return the total worked hours for the week, including any deductions
+        return totalWorkedHours.setScale(2, RoundingMode.HALF_UP);
     }
-
-
 
     /**
      * Retrieves the available weekly cut-offs (start and end dates).
@@ -122,34 +154,6 @@ public class AttendanceService {
         }
 
         return weeklyCutoffs;
-    }
-
-    /**
-     * Calculates the gross weekly salary for a specific employee.
-     * Considers basic salary, hourly rate, and worked hours.
-     *
-     * @param employeeNumber The employee number of the employee.
-     * @param startDate      The start date (Monday) of the week.
-     * @param endDate        The end date (Sunday) of the week.
-     * @return The gross weekly salary as a BigDecimal.
-     * @throws IllegalArgumentException If the date range is invalid or employee is not found.
-     */
-    public BigDecimal calculateGrossWeeklySalary(String employeeNumber, LocalDate startDate, LocalDate endDate) {
-        if (!startDate.getDayOfWeek().equals(DayOfWeek.MONDAY) || !endDate.getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
-            throw new IllegalArgumentException("Start date must be a Monday and end date must be a Sunday.");
-        }
-
-        Employee employee = employeeService.getEmployeeByEmployeeNumber(employeeNumber)
-                .orElseThrow(() -> new IllegalArgumentException("Employee not found."));
-
-        double totalHours = calculateWeeklyHours(employeeNumber, startDate, endDate);
-
-        BigDecimal hourlyRate = employee.getHourlyRate();  // Use hourly rate from Employee entity
-
-        // Calculate gross weekly salary (hourly rate * total hours)
-        BigDecimal grossWeeklySalary = hourlyRate.multiply(BigDecimal.valueOf(totalHours));
-
-        return grossWeeklySalary;
     }
 
 }

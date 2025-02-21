@@ -31,11 +31,17 @@ Refer to the following list of links to get an idea what are the REST API endpoi
 1. [User: User registration, authentication and fetching users](https://github.com/imperionite/cp1/blob/main/USER_HTTP.md)
     - [Sample Users/Auth Requests](https://github.com/imperionite/cp1/blob/main/users.http)
 
-2. [Employee: Displaying employee information, creating new employee, etc.](https://github.com/imperionite/cp1/blob/main/EMPLOYEE_HTTP.md)
+2. [Employee: Retrieving employee information, creating new employee, etc.](https://github.com/imperionite/cp1/blob/main/EMPLOYEE_HTTP.md)
     -  [Sample Employees Requests](https://github.com/imperionite/cp1/blob/main/employees.http)
 
 3. [Attendance: Calculating employee's work hours, retrieving available weekly weekly cut-offs, displaying attendance records, creating new attendance](https://github.com/imperionite/cp1/blob/main/ATTENDANCE_HTTP.md)
     -  [Sample Attendance Requests](https://github.com/imperionite/cp1/blob/main/attendance.http)
+
+4. [Deductions: Fetching generic deductions calculated weekly by logged in employee/user](https://github.com/imperionite/cp1/blob/main/DEDUCTIONS_HTTP.md)
+    - [Sample Deductions Requests](https://github.com/imperionite/cp1/blob/main/deductions.http)
+
+5. [Salary: Fetching logged in employee/user weekly salary info - gross/net](https://github.com/imperionite/cp1/blob/main/SALARY_HTTP.md)
+    - [Sample Deductions Requests](https://github.com/imperionite/cp1/blob/main/salary.http)
 
 ---
 

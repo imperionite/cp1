@@ -1,0 +1,35 @@
+### variables
+@employeeAccess=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMDAwMSIsImlhdCI6MTc0MDExMTc2NCwiZXhwIjoxNzQwMTIyNTY0fQ.a6ON84i5iREzBagx1vN1vzTrIRJ7yNAs8P9j57CJn8EtQftV7cVHTIvXftg_HFtJIkqAWpFnwZ8W3LWf-IZvjg
+@adminAccess=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc0MDA3MjUzOSwiZXhwIjoxNzQwMDgzMzM5fQ.6DD23EjvGdcz1M88txzykppXLup1I3NQdPW3VtRMGcdpP5TWAUkPA1oowEJugMYriqP19PaEpPDLnHcaV3OYAw
+
+#####################################################################################################################
+
+### login (public & all users)
+POST http://localhost:8080/api/auth/login HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "10001",
+    "password": "passworD#1"
+}
+
+### login for admin
+POST http://localhost:8080/api/auth/login HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "admin",
+    "password": "adminPassword"
+}
+
+
+#### calculate gross weekly salary (Auth user or Admin)
+GET http://localhost:8080/api/salary/gross-weekly-salary?startDate=2024-08-12&endDate=2024-08-18 HTTP/1.1
+Authorization: Bearer {{employeeAccess}}
+Content-Type: application/json
+
+
+#### calculate net weekly salary (Auth user or Admin)
+GET http://localhost:8080/api/salary/net-weekly-salary?startDate=2024-08-12&endDate=2024-08-18 HTTP/1.1
+Authorization: Bearer {{employeeAccess}}
+Content-Type: application/json

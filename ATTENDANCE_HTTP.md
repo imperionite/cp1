@@ -33,7 +33,7 @@ GET /api/attendance/admin?startDate={startDate}&endDate={endDate}
 
 ![work hours](https://drive.google.com/uc?id=1QjtVpyO2HgUJdAJhnQys7MOZC07UxOEQ)
 
-## Entering out of range dates for calculating worked hours - Auth user
+## Calculate weekly hours worked (invalid dates) - Auth user
 
 ![incorrect date range](https://drive.google.com/uc?id=1Rij1Pq4msYtKogC82LfbS1HwsKorcWmt)
 
@@ -41,6 +41,6 @@ GET /api/attendance/admin?startDate={startDate}&endDate={endDate}
 
 ![gross salary](https://drive.google.com/uc?id=1zMbdkreHvxHfwoAiqgR03KyRqoytWVgA)
 
-## Gross weekly salary date not in range
+## Gross weekly salary (invalid dates)
 
 ![gross salary](https://drive.google.com/uc?id=1UwpkNhi_NM2wulYEKwt21d57mj60RpPq)

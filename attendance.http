@@ -1,6 +1,6 @@
 ### variables
-@employeeAccess=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMDAwMSIsImlhdCI6MTc0MDAyNTczMiwiZXhwIjoxNzQwMDM2NTMyfQ.vBW3bI-5EYcWqjqXxzNXO3-Pjzima7Zy0DUINg7MKyFtxzLGgrGHmSOq2Fxwg2JthDBdlazT_tJl8_TE4-yqrQ
-@adminAccess=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTczOTg1NDE4OCwiZXhwIjoxNzM5ODY0OTg4fQ.Z0fu7UTwxqCrKFLrGPZr6lkEOsLvco86YmxccaR_wwOlOtn6NVRbihHXzpz7XWvyKJt63YW2-fA_l9I4sM__AA
+@employeeAccess=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMDAwMSIsImlhdCI6MTc0MDExNDkwMCwiZXhwIjoxNzQwMTI1NzAwfQ.SDjTEXSnaMsiPW_UsbqaatUTp_vNtxVH9sHdFcQWyzFaZTLhND3EJJOPWa7VBW1B7j4wvBbkz6Ivsk_eVXnGUw
+@adminAccess=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc0MDA3MjUzOSwiZXhwIjoxNzQwMDgzMzM5fQ.6DD23EjvGdcz1M88txzykppXLup1I3NQdPW3VtRMGcdpP5TWAUkPA1oowEJugMYriqP19PaEpPDLnHcaV3OYAw
 
 #####################################################################################################################
 
@@ -37,30 +37,30 @@ Content-Type: application/json
 
 
 #### attendance retrieval by Employee and Date Range (auth user and employee)
-GET http://localhost:8080/api/attendance/employee/10001?startDate=2024-06-01&endDate=2024-06-10
+GET http://localhost:8080/api/attendance/employee/10001?startDate=2024-06-01&endDate=2024-06-10 HTTP/1.1
 Authorization: Bearer {{employeeAccess}}
 Content-Type: application/json
 
 
 #### retrieves attendance records for all employees within a date range (admin only)
-GET http://localhost:8080/api/attendance/admin?startDate=2024-06-01&endDate=2024-06-10
+GET http://localhost:8080/api/attendance/admin?startDate=2024-06-01&endDate=2024-06-10 HTTP/1.1
 Authorization: Bearer {{adminAccess}}
 Content-Type: application/json
 
 #### list of actual start and end dates of the available weeks (Auth users)
-GET http://localhost:8080/api/attendance/weekly-cutoffs
+GET http://localhost:8080/api/attendance/weekly-cutoffs HTTP/1.1
 Authorization: Bearer {{employeeAccess}}
 Content-Type: application/json
 
-#### calculate weekly worked hours (Auth users)
-GET http://localhost:8080/api/attendance/employee/10034/weekly-hours?startDate=2024-09-23&endDate=2024-09-29
+#### calculate weekly worked hours (Auth user)
+GET http://localhost:8080/api/attendance/employee/10001/weekly-hours?startDate=2024-08-12&endDate=2024-08-18 HTTP/1.1
 Authorization: Bearer {{employeeAccess}}
 Content-Type: application/json
 
-#### calculate gross weekly salary (Auth users or Admin)
-GET http://localhost:8080/api/attendance/employee/weekly-salary?startDate=2024-09-23&endDate=2024-09-29
-Authorization: Bearer {{employeeAccess}}
-Content-Type: application/json
+
+
+
+
 
 
 
