@@ -1,5 +1,5 @@
 # **cp1**  
-The MotorPH Payroll System - Phase 1
+A MotorPH Payroll System - Phase 1 coding project.
 
 ## **Project Description**  
 
