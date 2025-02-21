@@ -98,25 +98,6 @@ The primary focus remains on satisfying **Phase 1 requirements** first, while en
 
 ---
 
-## Date and Time Formats
-
-The API uses the following date and time formats:
-
-- **Date:** `YYYY-MM-DD` (ISO 8601 format). This format is used for all date-related fields in the API requests and responses. For example: `2024-07-10`.
-- **Time:** `HH:mm` (24-hour format). This format is used for all time-related fields. For example: `14:30` (for 2:30 PM).
-
-**Rationale:** The ISO 8601 date format (`YYYY-MM-DD`) is an international standard and is widely recognized. It avoids ambiguity and ensures consistency across different systems. The 24-hour time format is also a standard and avoids confusion between AM and PM. Using these standard formats makes the API easier to use and integrate with other systems.
-
----
-
-## Weekly Cut-off Dates
-
-This API provides a way to retrieve the available weekly cut-off periods for attendance tracking. The `/api/attendance/weekly-cutoffs` endpoint returns a list of weekly start and end dates. These dates are derived from the earliest and latest attendance records in the database. This allows users to easily select the relevant week for viewing or calculating their work hours.
-
-**Rationale:** Providing these pre-calculated weekly cut-offs simplifies the user experience. Users don't need to manually determine the start and end dates for each week; the API provides them with the available options based on existing attendance data. This also ensures consistency and avoids potential errors from manually entered dates.
-
----
-
 ## **Getting Started**
 
 ### **Prerequisites**
