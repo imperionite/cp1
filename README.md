@@ -93,7 +93,7 @@ During the initial execution of the application, several tables and correspondin
 
 The **MotorPH Payroll System - Phase 1** is built upon the initial requirements identified in the **MotorPH System Milestone 1 Document** ([MS1.md](https://github.com/imperionite/cp1ms1/blob/main/MS1.md)). This document serves as the **foundation** for the system, explicitly defining the core functionalities required for Phase 1.  
 
-However, the current repository ([cp1](https://github.com/imperionite/cp1)) also **incorporates additional considerations**, including implicit requirements and optional enhancements identified by the developer. These additional features are not part of the strict Phase 1 scope but have been **considered for future incremental improvements** as the project progresses. This respository served as the foundation of MS 2.
+However, the current project repository also **incorporates additional considerations**, including implicit requirements and optional enhancements identified by the developer. These additional features are not part of the strict Phase 1 scope but have been **considered for future incremental improvements** as the project progresses. This respository served as the foundation of MS 2.
 
 ### **Key Distinctions:**  
 ✔️ **Explicit Requirements (MS1  repository)**: The non-negotiable functionalities required by MotorPH for Phase 1, such as employee detail presentation, work hours calculation, and payroll processing.  
