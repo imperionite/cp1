@@ -14,4 +14,4 @@ This section compiles the screenshots captured during the testing of REST API en
 
 ## Retrieving weekly Withholding tax contribution - Auth user/Admin
 
-![withholding tax](https://drive.google.com/uc?id=1-VVMFf-vSvLB6rsmA1c9nQE8N22QItai)
+![withholding tax](https://drive.google.com/uc?id=1GJ6Z4GstzYUhizN2I-S_0VAPRtLjvljF)
