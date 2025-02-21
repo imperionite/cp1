@@ -156,7 +156,7 @@ public class Attendance {
 **Constraints and Considerations:**
 
 - All fields are marked as `@NotNull`.
-- The `equals()` and `hashCode()` methods are overridden, and they are based on the `employeeNumber` and `date` fields, implying that an employee can have only one attendance record per day. _(Verify if this is the intended behavior.)_
+- The `equals()` and `hashCode()` methods are overridden, and they are based on the `employeeNumber` and `date` fields, implying that an employee can have only one attendance record per day.
 
 ## Date and Time Formats
 
@@ -290,3 +290,84 @@ BigDecimal weeklySalary = monthlySalary.divide(BigDecimal.valueOf(4.33), Roundin
 BigDecimal taxableIncome = weeklySalary.subtract(totalDeductions);
 return calculateWeeklyWithholdingTax(taxableIncome); // Use weekly tax table
 ```
+
+---
+
+```markdown
+## Security Module
+
+This module implements JWT (JSON Web Token) based authentication and authorization for the API. It consists of a `JwtTokenProvider` for generating and validating JWTs, a `JwtAuthenticationFilter` for intercepting requests and authenticating users, and a `WebSecurityConfig` to configure Spring Security.
+```
+
+#### Token Generation
+
+The `generateToken(String username)` method generates a JWT for a given username.
+
+1.  **Claims:** The JWT's claims (payload) include the username (subject), the issuance time, and the expiration time.
+
+2.  **Signing:** The JWT is signed using a secret key (`SECRET_KEY`) using HMAC-SHA algorithm. **Important:** The current code uses a hardcoded secret key. In a production environment, this key should be stored securely (e.g., in a configuration file or environment variable) and should be rotated regularly.
+
+3.  **Expiration:** The token's expiration time is set to 3 hours (for development purposes). This value (`EXPIRATION_TIME`) should be adjusted for production.
+
+#### Token Validation
+
+The `validateToken(String token)` method validates a JWT.
+
+1.  **Parsing and Verification:** It attempts to parse the JWT using the secret key. If the token is valid (correct signature, not expired), the parsing is successful.
+
+2.  **Exception Handling:** `JwtException` or `IllegalArgumentException` are caught if the token is invalid, and the method returns `false`.
+
+#### Username Retrieval
+
+The `getUsername(String token)` method extracts the username from a validated JWT.
+
+1.  **Claims Retrieval:** It parses the JWT and retrieves the claims (payload).
+
+2.  **Subject Extraction:** It extracts the username (subject) from the claims.
+
+### JWT Authentication Filter (`JwtAuthenticationFilter`)
+
+The `JwtAuthenticationFilter` is a Spring Security filter that intercepts incoming requests and performs JWT-based authentication.
+
+#### Filtering Logic
+
+The `doFilterInternal()` method is the core of the filter.
+
+1.  **Header Check:** It checks for the `Authorization` header in the request. If the header is present and starts with "Bearer ", it extracts the JWT.
+
+2.  **Token Validation:** It calls the `validateToken()` method of the `JwtTokenProvider` to validate the JWT.
+
+3.  **Authentication:** If the token is valid, it extracts the username and uses a `UserDetailsService` to load the user's details. It then creates a `UsernamePasswordAuthenticationToken` and sets it in the `SecurityContextHolder`, effectively authenticating the user.
+
+4.  **Filter Chain:** It then calls `filterChain.doFilter()` to allow the request to continue to the next filter or servlet.
+
+### Web Security Configuration (`WebSecurityConfig`)
+
+The `WebSecurityConfig` class configures Spring Security for the application.
+
+```java
+@Configuration
+@EnableWebSecurity
+public class WebSecurityConfig {
+    // ...
+}
+```
+
+#### Configuration Details
+
+- **`jwtAuthenticationFilter()`:** Creates a bean of the `JwtAuthenticationFilter`.
+- **`authenticationManager()`:** Creates a bean of the `AuthenticationManager`.
+- **`passwordEncoder()`:** Creates a `BCryptPasswordEncoder` bean for password hashing. **Crucially, this should be used when storing user passwords.** The current code does not appear to be hashing passwords, which is a **major security risk.**
+- **`securityFilterChain()`:** Configures the security filter chain.
+  - **CSRF Disabled:** CSRF protection is disabled as this is a stateless API.
+  - **CORS Enabled:** CORS is enabled and configured to allow requests from specific origins, methods, and headers. **It's extremely important to modify the `allowedOrigins` list for production.** Do not use wildcards (`*`) in production unless you absolutely understand the security implications.
+  - **Stateless Session:** Session management is set to stateless as JWTs are used for authentication.
+  - **Authorization:** `authorizeHttpRequests` configures access control. The `/api/auth/register` endpoint is restricted to users with the "ADMIN" role. Other `/api/auth` endpoints (login, etc.) are permitted to all. All other requests require authentication.
+  - **JWT Filter:** The `JwtAuthenticationFilter` is added before the `UsernamePasswordAuthenticationFilter` to intercept and process JWTs.
+
+**Key Security Considerations:**
+
+- **Secret Key:** The JWT secret key (`SECRET_KEY`) _must_ be stored securely and rotated regularly. **Hardcoding it in the code is a serious vulnerability.**
+- **Password Hashing:** User passwords _must_ be hashed using a strong algorithm (like BCrypt or Argon2) before being stored in the database. **Storing passwords in plain text is a critical security flaw.**
+- **CORS Configuration:** The `allowedOrigins` in the CORS configuration _must_ be carefully configured for production. Only the specific origins of your frontend applications should be allowed. Using wildcards (`*`) can create security vulnerabilities.
+- **HTTPS:** In a production environment, all communication should be over HTTPS to protect against man-in-the-middle attacks.
