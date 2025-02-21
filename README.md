@@ -13,7 +13,7 @@ This system is designed to:
 
 ### REST API Design
 
-![net salary](https://drive.google.com/uc?id=1-VVMFf-vSvLB6rsmA1c9nQE8N22QItai)
+![rest api code for employees](https://drive.google.com/uc?id=1dPBack7-dJFGgW1drktAJGVRRBAdNAMQ)
 
 This project is designed as a RESTful API rather than a Java console application for several key reasons:
 
@@ -27,6 +27,8 @@ This project is designed as a RESTful API rather than a Java console application
 ---
 
 ## **REST API Endpoints & Manual API Tests**
+
+![net salary](https://drive.google.com/uc?id=1-VVMFf-vSvLB6rsmA1c9nQE8N22QItai)
 
 Refer to the following list of links to get an idea what are the REST API endpoints that are developed in the prohject and how HTTP requests are executed in [REST Client extension for Visual Studio Code (VS Code)](https://marketplace.visualstudio.com/items?itemName=humao.rest-client).
 
