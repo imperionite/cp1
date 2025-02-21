@@ -13,6 +13,8 @@ This system is designed to:
 
 ### REST API Design
 
+![net salary](https://drive.google.com/uc?id=1-VVMFf-vSvLB6rsmA1c9nQE8N22QItai)
+
 This project is designed as a RESTful API rather than a Java console application for several key reasons:
 
 *   **Scalability:** A REST API can be easily scaled to handle a large number of requests.  It can be deployed on multiple servers and scaled horizontally as needed.
