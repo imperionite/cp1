@@ -13,8 +13,6 @@ This system is designed to:
 
 ### REST API Design
 
-![rest api code for employees](https://drive.google.com/uc?id=1dPBack7-dJFGgW1drktAJGVRRBAdNAMQ)
-
 This project is designed as a RESTful API rather than a Java console application for several key reasons:
 
 *   **Scalability:** A REST API can be easily scaled to handle a large number of requests.  It can be deployed on multiple servers and scaled horizontally as needed.
