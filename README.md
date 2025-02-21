@@ -27,6 +27,10 @@ This project is designed as a RESTful API rather than a Java console application
 
 ## **REST API Endpoints & Manual API Tests**
 
+![net salary](https://drive.google.com/uc?id=1-VVMFf-vSvLB6rsmA1c9nQE8N22QItai)
+
+Refer to the following list of links to get an idea what are the REST API endpoints that are developed in the prohject and how HTTP requests are executed in [REST Client extension for Visual Studio Code (VS Code)](https://marketplace.visualstudio.com/items?itemName=humao.rest-client).
+
 | **Module**     | **Description**                                                                                                       | **API Documentation**                                                             | **Sample API Calls**                                                            |
 | -------------- | --------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
 | **User**       | User registration, authentication, and fetching users                                                                 | [User API](https://github.com/imperionite/cp1/blob/main/USER_HTTP.md)             | [Users HTTP](https://github.com/imperionite/cp1/blob/main/users.http)           |
