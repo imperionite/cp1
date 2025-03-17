@@ -145,3 +145,11 @@ mvn spring-boot:run
 The application should now be running on `http://localhost:8080`.
 
 ---
+
+## Unit Tests Links
+
+- [User](https://github.com/imperionite/cp1/blob/main/USER_UNIT_TESTS.md)
+- [Employee](https://github.com/imperionite/cp1/blob/main/EMPLOYEE_UNIT_TESTS.md)
+- [Attendance](https://github.com/imperionite/cp1/blob/main/ATTENDANCE_UNIT_TESTS.md)
+- [Deductions](https://github.com/imperionite/cp1/blob/main/DEDUCTIONS_UNIT_TESTS.md)
+- [Salary](https://github.com/imperionite/cp1/blob/main/SALARY_UNIT_TESTS.md)
