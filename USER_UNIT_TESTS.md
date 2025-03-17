@@ -11,6 +11,8 @@
 
 ![User Test](https://drive.google.com/uc?id=1kCnZkl5Vo6m2ZiYFkiSm1qAX6DGfurk4)
 
+---
+
 ## UserServiceTest Documentation
 
 | Test Method          | Description                                                                                                 | Mocked Interactions                                                           | Assertions                                                                                                                                                                    |
@@ -20,6 +22,8 @@
 | `testGetUserById`    | Tests the `getUserById()` method to verify that it returns the correct user when given a valid user ID.     | `when(userRepository.findById(id)).thenReturn(Optional.of(user))`             | `assertTrue` to check if an Optional is present, `assertEquals` to verify the user ID, `verify` to ensure `userRepository.findById(id)` was called exactly once.              |
 
 ![User Service](https://drive.google.com/uc?id=1PIw3SPlh23DjSLFUW2WQi2lB1knrTiNe)
+
+---
 
 ## UserControllerTest Documentation
 
