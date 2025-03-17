@@ -148,6 +148,13 @@ The application should now be running on `http://localhost:8080`.
 
 ## Unit Tests Links
 
+```bash
+
+# to run a test files in src/test/java/com/imperionite/cpi/{package_name}
+$ mvn test -Dtest=com.imperionite.cp1.controllers.{name_of_the_class}
+
+```
+
 - [User](https://github.com/imperionite/cp1/blob/main/USER_UNIT_TESTS.md)
 - [Employee](https://github.com/imperionite/cp1/blob/main/EMPLOYEE_UNIT_TESTS.md)
 - [Attendance](https://github.com/imperionite/cp1/blob/main/ATTENDANCE_UNIT_TESTS.md)
