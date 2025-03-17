@@ -1,0 +1,16 @@
+# cp1
+
+## SalaryServiceTest Documentation
+
+| Test Case Name                             | Description                                                                                                                                       | Input Data                                                                                         | Expected Outcome                                                                                                 | Dependencies                              |
+|-------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------|-------------------------------------------|
+| `testCalculateGrossWeeklySalary_ValidRange` | Tests the gross weekly salary calculation with valid date range.                                                                                 | Employee ID: `EMP001`, Start Date: `2024-01-01`, End Date: `2024-01-07`                           | Returns gross weekly salary: `1000.00` (mocked value)                                                            | `SalaryService`, `EmployeeService`        |
+| `testCalculateGrossWeeklySalary_InvalidRange` | Tests the gross weekly salary calculation with invalid date range (start date not a Monday, end date not a Sunday).                             | Employee ID: `EMP001`, Start Date: `2024-01-02`, End Date: `2024-01-07`                           | Returns error response: `400 BAD_REQUEST` with error message `Start date must be a Monday and end date must be a Sunday.` | `SalaryService`, `EmployeeService`        |
+| `testCalculateNetWeeklySalary_ValidRange`  | Tests the net weekly salary calculation with valid date range and valid deductions.                                                              | Employee ID: `EMP001`, Start Date: `2024-01-01`, End Date: `2024-01-07`, Predefined deductions.   | Returns net weekly salary after calculating deductions (e.g., `900.00` after deductions).                        | `SalaryService`, `DeductionsService`, `AttendanceService` |
+| `testCalculateNetWeeklySalary_InvalidRange` | Tests the net weekly salary calculation with invalid date range.                                                                                 | Employee ID: `EMP001`, Start Date: `2024-01-02`, End Date: `2024-01-07`                           | Returns error response: `400 BAD_REQUEST` with error message `Start date must be a Monday and end date must be a Sunday.` | `SalaryService`, `DeductionsService`, `AttendanceService` |
+| `testCalculateNetWeeklySalary_Unauthorized` | Tests the scenario where the user is unauthorized (e.g., no user details).                                                                       | Employee ID: `EMP001`, Start Date: `2024-01-01`, End Date: `2024-01-07`                           | Returns error response: `401 UNAUTHORIZED` indicating the user is not authorized to perform the calculation. | `SalaryService`, `DeductionsService`      |
+
+
+![Salary Service Test](https://drive.google.com/uc?id=1WUTQjnREjx9jmpxFJFOApsPMwoIoFP7Y)
+
+---
