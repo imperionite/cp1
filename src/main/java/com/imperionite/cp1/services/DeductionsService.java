@@ -31,7 +31,7 @@ public class DeductionsService {
     @Autowired
     private ResourceLoader resourceLoader;
 
-    private Contributions contributions;
+    Contributions contributions;
 
     /**
      * Loads contribution data from the `contributions.json` file during application
