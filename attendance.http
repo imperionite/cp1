@@ -1,7 +1,8 @@
 ### variables
-@employeeAccess=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMDAwMSIsImlhdCI6MTc0MDU1Mzg2OCwiZXhwIjoxNzQwNTY0NjY4fQ.4kpaafy7AKXcqpV4O3NL2SoMJ54qsWMzaI3ufI58xtufAIFxamxw7lWRdOrtsATE6kaIBFyOnOYxlLjsyE-vqA
-@adminAccess=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc0MDU1MzkxNSwiZXhwIjoxNzQwNTY0NzE1fQ.EIQtLO7xlQCyR6AWOqz4RTqB8m25lskC09GbC_cmTuwy9i7oVSI57vhlIiMQl93qEpdqmX8t63EQUSE5FEV1Pw
+@employeeAccess=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMDAwMSIsImlhdCI6MTc0MjUyNDE0NiwiZXhwIjoxNzQyNTM0OTQ2fQ.9u68kWLIPt0FfZpDjTbPsmq5zhVegeE-vLUbhGXwT1PpZdQyzLb6uZVs__rSvXNfgYmvldal2uR6KsBuFB3gAA
 
+###
+@adminAccess=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc0MjUyNDE5MiwiZXhwIjoxNzQyNTM0OTkyfQ.ihQ16zUEnn6QHpfDwUYHOezu_LRUIlmFdaqkaskYtQH_89jF2xxYpZoABn1_XJf_TEJZUndB7r9DyvcikZprFQ
 #####################################################################################################################
 
 ### login (public & all users)
@@ -37,7 +38,7 @@ Content-Type: application/json
 
 
 #### attendance retrieval by Employee and Date Range (auth user and employee)
-GET http://localhost:8080/api/attendance/employee/10001?startDate=2024-06-01&endDate=2024-06-10 HTTP/1.1
+GET http://localhost:8080/api/attendance/employee/10001?startDate=2024-06-03&endDate=2024-06-09 HTTP/1.1
 Authorization: Bearer {{employeeAccess}}
 Content-Type: application/json
 
@@ -47,13 +48,13 @@ GET http://localhost:8080/api/attendance/admin?startDate=2024-06-01&endDate=2024
 Authorization: Bearer {{adminAccess}}
 Content-Type: application/json
 
-#### list of start data and end date per week (Auth users)
+#### list of start date and end date per week (Auth users)
 GET http://localhost:8080/api/attendance/weekly-cutoffs HTTP/1.1
 Authorization: Bearer {{employeeAccess}}
 Content-Type: application/json
 
 #### calculate weekly worked hours (Auth user)
-GET http://localhost:8080/api/attendance/employee/10001/weekly-hours?startDate=2024-08-12&endDate=2024-08-18 HTTP/1.1
+GET http://localhost:8080/api/attendance/employee/10001/weekly-hours?startDate=2024-06-10&endDate=2024-06-16 HTTP/1.1
 Authorization: Bearer {{employeeAccess}}
 Content-Type: application/json
 

@@ -128,6 +128,11 @@ public class SalaryController {
             BigDecimal weeklyWorkedHours = attendanceService.calculateWeeklyHours(employeeNumber, startDate,
                     endDate);
 
+            // Check for null and default to BigDecimal.ZERO
+            sssDeduction = (sssDeduction != null) ? sssDeduction : BigDecimal.ZERO;
+            philhealthDeduction = (philhealthDeduction != null) ? philhealthDeduction : BigDecimal.ZERO;
+            pagibigDeduction = (pagibigDeduction != null) ? pagibigDeduction : BigDecimal.ZERO;
+
             // Compute net salary
             BigDecimal totalDeductions = sssDeduction.add(philhealthDeduction).add(pagibigDeduction)
                     .add(withholdingTax);
@@ -153,3 +158,5 @@ public class SalaryController {
     }
 
 }
+
+

@@ -1,7 +1,6 @@
 ### variables
-@employeeAccess=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMDAwMSIsImlhdCI6MTczOTk3MjY4MiwiZXhwIjoxNzM5OTgzNDgyfQ.baRlHtgn3o2In1CLrGWgIL2z2l21e0cC6XXQp7WI-_liJIDTD8ApA22ze5ce9euAkIhjLJXygEPSvTngJkufqw
-@adminAccess=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc0MDExNDgyMywiZXhwIjoxNzQwMTI1NjIzfQ.ZcHODLczBshz9xHbR5sq9ke67I_Frq3FjAePL5AM31OpfzyVc-pMHbKpPUQKYFi3rYAqcEtv3j4WuSgbB0vA8w
-
+@employeeAccess=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMDAwMSIsImlhdCI6MTc0MjQ3ODMyNCwiZXhwIjoxNzQyNDg5MTI0fQ.RKGTgSGri7B4oQ6JWNdLpBDcJkNY5ENMspauow4-VE5MY65U1cL4rVVhvdhX8GDDd0B3yNlH3RNVazASOyrDZA
+@adminAccess=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc0MjQ4MTYzOCwiZXhwIjoxNzQyNDkyNDM4fQ.TMixACyQ8wG_hsV_QeXcx2nKepg-7bBXwOPXL69C_nyMVetvZ5_o5zwuUsBgI107FUO17qzArKbbkVmajRn6tw
 #####################################################################################################################
 
 ### login (public & all users)
@@ -28,16 +27,16 @@ Authorization: Bearer {{adminAccess}}
 Content-Type: application/json
 
 {
-"employeeNumber": "10035",
+  "employeeNumber": "10035",
   "lastName": "Alert",
   "firstName": "Amber",
   "birthday": "1980-11-22",
   "address": "19 Global City, Taguig",
-  "phoneNumber": "797-009-261",
-  "sss": "44-2400689-6",
-  "philhealth": "539192926451",
-  "tin": "642-454-690-000",
-  "pagibig": "810850209333",
+  "phoneNumber": "097-009-010",
+  "sss": "44-2400689-0",
+  "philhealth": "539192926450",
+  "tin": "642-454-690-009",
+  "pagibig": "810850209332",
   "status": "Regular",
   "position": "Corporate Data Scientist",
   "immediateSupervisor": "Lim, Antonio",

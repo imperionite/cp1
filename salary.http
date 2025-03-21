@@ -1,6 +1,6 @@
 ### variables
-@employeeAccess=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMDAwMSIsImlhdCI6MTc0MDU1NDMyNCwiZXhwIjoxNzQwNTY1MTI0fQ.vvDni4OHqavaaIJ1bGcaDNXZMOEEFdXe7qypm6-Iq_zXXWSbxNAyRFTzu-0ChI5jNc0nNXieIeVD4WsU03V7hQ
-@adminAccess=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc0MDA3MjUzOSwiZXhwIjoxNzQwMDgzMzM5fQ.6DD23EjvGdcz1M88txzykppXLup1I3NQdPW3VtRMGcdpP5TWAUkPA1oowEJugMYriqP19PaEpPDLnHcaV3OYAw
+@employeeAccess=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMDAzMCIsImlhdCI6MTc0MjUyODY1OSwiZXhwIjoxNzQyNTM5NDU5fQ.CYTCpa7iHjCcYvq6OR0HjPbKQy3e_y21A2ODLUq0cTEEI18cV6SWH8WqLeVeIwPn0dseOYpAuxdlYGZl_FJouA
+@adminAccess=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc0MjUyODU0NSwiZXhwIjoxNzQyNTM5MzQ1fQ.zEwFkHjh3qPsM2RUxarQKd3Y_JG_T-pdYJ6r0_jJqy85gAD4H78xp-kxnsBPAQownpphQqch7vPNY12tZf2hoA
 
 #####################################################################################################################
 
@@ -9,7 +9,7 @@ POST http://localhost:8080/api/auth/login HTTP/1.1
 Content-Type: application/json
 
 {
-    "username": "10001",
+    "username": "10030",
     "password": "passworD#1"
 }
 
